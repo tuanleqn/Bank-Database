@@ -64,8 +64,7 @@ class AuthService {
             if (result.affectedRows === 1) {
               resolve({
                 status: true,
-                name: user.ten,
-                email: user.email,
+                idUser: user.id,
                 role: user.role,
               });
             } else resolve({ status: false, message: "Không thể lưu IP" });

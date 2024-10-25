@@ -26,7 +26,6 @@ function Login() {
                 });
 
                 const data = await response.json();
-                console.log(data);
 
                 if (response.ok && data.status === false) {
                     navigate('/user');
@@ -83,14 +82,12 @@ function Login() {
             const data = await response.json();
 
             if (data.status) {
-                localStorage.setItem('name', data.name);
-                localStorage.setItem('email', data.email);
+                localStorage.setItem('idUser', data.idUser);
                 localStorage.setItem('role', data.role);
-                localStorage.setItem('so_trang', data.so_trang);
                 toast.success('Đăng nhập thành công!');
                 setTimeout(() => {
                     navigate('/user');
-                }, 3000);
+                }, 300000);
             } else {
                 toast.error(data.message);
             }
