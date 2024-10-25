@@ -15,3 +15,11 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+const data = {
+  name: "Nguyen Van A",
+  userID: "123456",
+  email: "abc@hcmut.edu.vn",
+  phone: "0123456789",
+  faculty: "khmt"
+}
