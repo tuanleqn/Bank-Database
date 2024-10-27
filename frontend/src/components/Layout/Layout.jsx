@@ -1,8 +1,22 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import logo from '../../img/hcmut.png'
+import axios from 'axios';
+
+import logo from '../../img/hcmut.png';
 
 function Header() {
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    const handleLogout = async () => {
+        try {
+            await axios.post(`${apiUrl}auth/log_out`, {}, { withCredentials: true });
+            localStorage.clear();
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     useEffect(() => {
         const items = document.querySelectorAll('.headerNav li');
         items.forEach((item) => {
@@ -23,14 +37,21 @@ function Header() {
                 <li className="rounded-lg bg-primary px-4 py-1 text-white hover:bg-primary">
                     <Link to="">Trang chủ</Link>
                 </li>
-                
             </ul>
-            <div className="flex items-center">
+            <div className="relative flex items-center group ">
                 <img
                     src="https://c4.wallpaperflare.com/wallpaper/821/698/393/anime-naruto-akatsuki-naruto-deidara-naruto-wallpaper-preview.jpg"
                     alt="avatar"
                     className="size-[45px] rounded-full object-cover"
                 />
+                <div className="absolute top-[60px] right-0 opacity-0 bg-primary group-hover:opacity-100 transition-opacity duration-300 w-fit p-2 rounded-lg">
+                    <div
+                        className="hover:bg-white  hover:text-textColor text-white cursor-pointer px-4 py-2 rounded-lg inline-block whitespace-nowrap"
+                        onClick={handleLogout}
+                    >
+                        Đăng xuất
+                    </div>
+                </div>
             </div>
         </div>
     );
