@@ -82,12 +82,12 @@ function Login() {
             const data = await response.json();
 
             if (data.status) {
-                localStorage.setItem('idUser', data.idUser);
+                localStorage.setItem('idUser', data.id);
                 localStorage.setItem('role', data.role);
                 toast.success('Đăng nhập thành công!');
                 setTimeout(() => {
                     navigate('/user');
-                }, 300000);
+                }, 1500);
             } else {
                 toast.error(data.message);
             }

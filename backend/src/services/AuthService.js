@@ -45,29 +45,20 @@ class AuthService {
           resolve({ status: false, message: "Mật khẩu sai" });
           return;
         }
-     
+
         fetch("https://api.ipify.org?format=json")
           .then((response) => response.json())
           .then(async (data) => {
-            const IP = data.ip;
             req.session.user = {
               id: user.id,
-              name: user.ten,
-              email: user.email,
               role: user.role,
             };
-            const thoi_gian = new Date();
-            const [result] = await db.query(
-              "INSERT INTO nhat_ky (uid, noi_dung, thoi_gian) VALUES (?, ?, ?)",
-              [user.id, `Đã đăng nhập tài khoản IP: ${IP}`, thoi_gian]
-            );
-            if (result.affectedRows === 1) {
-              resolve({
-                status: true,
-                idUser: user.id,
-                role: user.role,
-              });
-            } else resolve({ status: false, message: "Không thể lưu IP" });
+
+            resolve({
+              status: true,
+              id: user.id,
+              role: user.role,
+            });
           });
       } catch (error) {
         reject(error);
