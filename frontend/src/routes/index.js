@@ -2,6 +2,7 @@ import AdminPage from '../pages/AdminPage/AdminPage';
 import UserPage from '../pages/UserPage/UserPage';
 import LandingPage from '../pages/LandingPage/LandingPage';
 import LoginPage from '../pages/LoginPage/LoginPage';
+import RegisterPage from '../pages/RegisterPage/RegisterPage';
 
 const routes = [
     {
@@ -21,6 +22,10 @@ const routes = [
     {
         path: '/auth/login',
         component: LoginPage,
+    },
+    {
+        path: '/auth/register',
+        component: RegisterPage,
     },
 ];
 

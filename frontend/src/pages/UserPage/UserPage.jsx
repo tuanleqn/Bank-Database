@@ -1,9 +1,9 @@
-function UserPage() {
-    return (
-        <div>
-            <h1>User Page</h1>
-        </div>
-    );
+function userPage() {
+  return (
+    <div>
+      <h1>User Page</h1>
+    </div>
+  );
 }
 
-export default UserPage;
+export default userPage;

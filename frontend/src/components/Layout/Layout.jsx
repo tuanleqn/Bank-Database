@@ -28,7 +28,7 @@ function Header() {
     }, []);
 
     return (
-        <div className="mx-6 flex h-[60px] items-center  rounded-2xl bg-opacity-10 bg-gradient-to-r from-[#DBE2EF] to-[#64768C] px-6">
+        <div className="mx-6 flex  items-center  rounded-2xl bg-opacity-10 bg-gradient-to-r from-[#DBE2EF] to-[#64768C] px-6 py-2">
             <div className="mr-[150px] flex items-center">
                 <img src={logo} alt="Logo" className="size-[45px]" />
                 <p className="ml-4 text-xl font-semibold">Bank</p>
@@ -59,17 +59,17 @@ function Header() {
 
 function Footer() {
     return (
-        <div className="flex h-20 items-center justify-center bg-primary text-white -mb-20">
-            <p className="text-center">© 2024 Tài chính vững mạnh, tương lai thịnh vượng.</p>
+        <div className="-mb-20 flex  items-center justify-center bg-primary py-4 text-white">
+            <p className="text-center">© 2021 BK Tra cứu. All rights reserved.</p>
         </div>
     );
 }
 
 function Layout({ children }) {
     return (
-        <div className="flex h-20 min-h-screen flex-col bg-bgColor pt-6">
+        <div className="flex h-20  flex-col bg-bgColor pt-6">
             <Header />
-            <main className="flex-grow px-12">{children}</main>
+            <main className="flex-grow px-12 py-6 bg-bgColor">{children}</main>
             <Footer />
         </div>
     );
