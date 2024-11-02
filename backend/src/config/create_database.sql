@@ -1,6 +1,6 @@
-drop database if exists bank_db;
-create database bank_db;
-use bank_db;
+DROP DATABASE IF EXISTS bank_db;
+CREATE DATABASE bank_db;
+USE bank_db;
 
 -- CUSTOMER
 CREATE TABLE Customer (
@@ -45,16 +45,20 @@ CREATE TABLE Account (
     accountNumber CHAR(36) PRIMARY KEY DEFAULT (UUID()),  
     customerCode CHAR(36), 
     accountType ENUM('Savings', 'Checking', 'Loan') NOT NULL, 
-    openDate DATE NOT NULL DEFAULT CURRENT_DATE,
+    openDate DATE NOT NULL,
     FOREIGN KEY (customerCode) REFERENCES Customer(customerCode),
     CONSTRAINT check_type CHECK (accountType IN ('Savings', 'Checking', 'Loan'))
 );
 
 DELIMITER //
 CREATE TRIGGER CHK_account_open_date
-BEFORE UPDATE ON Account
+BEFORE INSERT ON Account
 FOR EACH ROW
 BEGIN
+    IF NEW.openDate IS NULL THEN
+        SET NEW.openDate = CURRENT_DATE;
+    END IF;
+
     IF NEW.openDate > CURRENT_DATE() THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Ngày tạo tài khoản không thể lớn hơn ngày hiện tại.';
@@ -86,7 +90,7 @@ CREATE TABLE CheckingAccount (
 -- LOAN ACCOUNT
 CREATE TABLE LoanAccount (
     accountNumber CHAR(36) PRIMARY KEY,
-    dateOfTaken DATE NOT NULL DEFAULT CURRENT_DATE,
+    dateOfTaken DATE NOT NULL,
     dueBalance DECIMAL(15, 2) NOT NULL CHECK (dueBalance >= 0), 
     interestRate DECIMAL(5, 2) NOT NULL,
     FOREIGN KEY (accountNumber) REFERENCES Account(accountNumber)
@@ -94,7 +98,7 @@ CREATE TABLE LoanAccount (
 
 DELIMITER //
 CREATE TRIGGER CHK_account_loan_taken_date
-BEFORE UPDATE ON LoanAccount
+BEFORE INSERT ON LoanAccount
 FOR EACH ROW
 BEGIN
     IF NEW.dateOfTaken > CURRENT_DATE() THEN
@@ -105,12 +109,9 @@ END;
 //
 DELIMITER ;
 
-
 -- Tạm thời tắt kiểm tra khoá ngoại
 SET FOREIGN_KEY_CHECKS = 0;
-DROP DATABASE IF EXISTS bank_db;
-CREATE DATABASE bank_db;
-USE bank_db;
+
 CREATE TABLE Branch (
     branchName VARCHAR(255) PRIMARY KEY,
     branchNo INT UNSIGNED NOT NULL,
@@ -121,6 +122,7 @@ CREATE TABLE Branch (
     email VARCHAR(255) NOT NULL,
     employeeID CHAR(12) NOT NULL -- FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)  -- Khoá ngoại sẽ thêm sau
 );
+
 CREATE TABLE Employee (
     employeeID CHAR(12) PRIMARY KEY,
     firstName VARCHAR(255) NOT NULL,
@@ -132,34 +134,63 @@ CREATE TABLE Employee (
     city VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     branchName VARCHAR(255) NOT NULL,
-    FOREIGN KEY (branchName) REFERENCES Branch(branchName),
-    -- Kiểm tra tuổi nhân viên phải lớn hơn hoặc bằng 18
-    CHECK (DATEDIFF(CURDATE(), birthDate) / 365.25 >= 18)
+    FOREIGN KEY (branchName) REFERENCES Branch(branchName)
 );
+
+DELIMITER //
+CREATE TRIGGER check_employee_age
+BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    IF DATEDIFF(CURDATE(), NEW.birthDate) / 365.25 < 18 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Nhân viên phải từ 18 tuổi trở lên.';
+    END IF;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER check_employee_age_update
+BEFORE UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+    IF DATEDIFF(CURDATE(), NEW.birthDate) / 365.25 < 18 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Nhân viên phải từ 18 tuổi trở lên.';
+    END IF;
+END;
+//
+DELIMITER ;
+
 ALTER TABLE Branch
 ADD CONSTRAINT FK_Branch_Employee FOREIGN KEY (employeeID) REFERENCES Employee(employeeID);
+
 CREATE TABLE BranchPhone(
     branchName VARCHAR(255) NOT NULL,
     phoneNumber CHAR(10) NOT NULL,
     PRIMARY KEY (branchName, phoneNumber),
     FOREIGN KEY (branchName) REFERENCES Branch(branchName)
 );
+
 CREATE TABLE BranchFax(
     branchName VARCHAR(255) NOT NULL,
     faxNumber CHAR(10) NOT NULL,
     PRIMARY KEY (branchName, faxNumber),
     FOREIGN KEY (branchName) REFERENCES Branch(branchName)
 );
+
 CREATE TABLE EmployeePhone(
     employeeID CHAR(12) NOT NULL,
     phoneNumber CHAR(10) NOT NULL,
     PRIMARY KEY (employeeID, phoneNumber),
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
 );
--- Bật lại kiểm tra khoá ngoại
 SET FOREIGN_KEY_CHECKS = 1;
+
 -- Khởi tạo một vài giá trị ban đầu để tránh lỗi tham chiếu khoá ngoại
 SET FOREIGN_KEY_CHECKS = 0;
+
 INSERT INTO Employee (
         employeeID,
         firstName,
@@ -196,6 +227,7 @@ VALUES (
         'janesmith@example.com',
         'Branch B'
     );
+
 INSERT INTO Branch (
         branchName,
         branchNo,
@@ -226,14 +258,17 @@ VALUES (
         'branchB@example.com',
         'E002'
     );
+
 INSERT INTO BranchPhone (branchName, phoneNumber)
 VALUES ('Branch A', '1234567890'),
     ('Branch B', '0987654321');
+
 INSERT INTO BranchFax (branchName, faxNumber)
 VALUES ('Branch A', '1112223333'),
     ('Branch B', '4445556666');
+
 INSERT INTO EmployeePhone (employeeID, phoneNumber)
 VALUES ('E001', '1234567890'),
     ('E002', '0987654321');
-SET FOREIGN_KEY_CHECKS = 1;
 
+SET FOREIGN_KEY_CHECKS = 1;
