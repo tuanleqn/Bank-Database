@@ -47,9 +47,9 @@ function AdminPage() {
     ];
 
     return (
-        <div className="flex mt-6 gap-12 ">
+        <div className="flex  gap-12 ">
             {/* left */}
-            <div className="w-[35%] border h-[560px] flex flex-col shadow-lg bg-white rounded-xl overflow-hidden">
+            <div className="w-[35%] border   flex flex-col shadow-lg bg-white rounded-xl overflow-hidden">
                 <div className="bg-primary rounded-ee-xl text-white font-semibold px-6 py-2 w-fit">Khách hàng</div>
 
                 <div className="flex border mt-6 ml-6 w-[300px] items-center rounded-full bg-white px-4 py-2 shadow outline-none">
@@ -57,7 +57,7 @@ function AdminPage() {
                     <input type="text" placeholder="Search" className="ml-4 w-fit flex-grow outline-none" />
                 </div>
 
-                <div className="overflow-auto flex-grow mt-6">
+                <div className="overflow-auto mt-6 h-[490px]">
                     <Table
                         columns={columnsUsers}
                         dataSource={dataUsers}
@@ -106,7 +106,7 @@ function AdminPage() {
                         Danh sách tài khoản{' '}
                     </div>
 
-                    <div className="overflow-auto h-[260px] flex-grow mt-6">
+                    <div className="overflow-auto h-[320px] flex-grow mt-6">
                     <Table
                         columns={columnsAccounts}
                         dataSource={dataAccouts}

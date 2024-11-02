@@ -57,20 +57,13 @@ function Header() {
     );
 }
 
-function Footer() {
-    return (
-        <div className="-mb-20 flex  items-center justify-center bg-primary py-4 text-white">
-            <p className="text-center">© 2021 BK Tra cứu. All rights reserved.</p>
-        </div>
-    );
-}
+
 
 function Layout({ children }) {
     return (
-        <div className="flex h-20  flex-col bg-bgColor pt-6">
+        <div className="flex h-screen  flex-col bg-bgColor pt-0">
             <Header />
-            <main className="flex-grow px-12 py-6 bg-bgColor">{children}</main>
-            <Footer />
+            <main className=" pt-6  px-12 py-0 bg-bgColor">{children}</main>
         </div>
     );
 }
