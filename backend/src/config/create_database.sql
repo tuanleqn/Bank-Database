@@ -87,7 +87,7 @@ CREATE TABLE CheckingAccount (
 CREATE TABLE LoanAccount (
     accountNumber CHAR(36) PRIMARY KEY,
     dateOfTaken DATE NOT NULL DEFAULT CURRENT_DATE,
-    dueBalance DECIMAL(15, 2) NOT NULL CHECK (dueBalance >= 0), 
+    dueBalance DECIMAL(15, 2) NOT NULL, 
     interestRate DECIMAL(5, 2) NOT NULL,
     FOREIGN KEY (accountNumber) REFERENCES Account(accountNumber)
 );
