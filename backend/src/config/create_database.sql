@@ -10,7 +10,7 @@ CREATE TABLE Customer (
     homeAddress VARCHAR(255) NOT NULL CHECK (TRIM(homeAddress) <> ''),
     officeAddress VARCHAR(255), 
     phoneNumber VARCHAR(15) NOT NULL,
-    email VARCHAR(100), 
+    email VARCHAR(100) NOT NULL UNIQUE CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'), 
     dob DATE NOT NULL,
     guardianConfirmation BOOLEAN
 );
@@ -124,7 +124,7 @@ CREATE TABLE Branch (
 );
 
 CREATE TABLE Employee (
-    employeeID CHAR(12) PRIMARY KEY,
+    employeeID CHAR(36) PRIMARY KEY,
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     birthDate DATE NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE Employee (
     street VARCHAR(255) NOT NULL,
     district VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
     branchName VARCHAR(255) NOT NULL,
     FOREIGN KEY (branchName) REFERENCES Branch(branchName)
 );
@@ -181,7 +181,7 @@ CREATE TABLE BranchFax(
 );
 
 CREATE TABLE EmployeePhone(
-    employeeID CHAR(12) NOT NULL,
+    employeeID CHAR(36) NOT NULL,
     phoneNumber CHAR(10) NOT NULL,
     PRIMARY KEY (employeeID, phoneNumber),
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
