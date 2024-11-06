@@ -208,8 +208,8 @@ VALUES (
         'John',
         'Doe',
         '1985-06-15',
-        12345,
-        '123 Elm St',
+        123,
+        'Elm St',
         'District 1',
         'City A',
         'johndoe@example.com',
@@ -220,14 +220,18 @@ VALUES (
         'Jane',
         'Smith',
         '1990-09-10',
-        12346,
-        '456 Oak St',
+        456,
+        'Oak St',
         'District 2',
         'City B',
         'janesmith@example.com',
         'Branch B'
     );
-
+INSERT INTO EmployeePhone (employeeID, phoneNumber)
+VALUES ('E001', '5554184739'),
+    ('E002', '5557299711');
+    
+    
 INSERT INTO Branch (
         branchName,
         branchNo,
@@ -240,8 +244,8 @@ INSERT INTO Branch (
     )
 VALUES (
         'Branch A',
-        1,
-        '123 Main St',
+        15,
+        'Main St',
         'District 1',
         'City A',
         'Region 1',
@@ -250,25 +254,47 @@ VALUES (
     ),
     (
         'Branch B',
-        2,
-        '456 Market St',
+        95,
+        'Market St',
         'District 2',
         'City B',
         'Region 2',
         'branchB@example.com',
         'E002'
+    ),
+    (
+        'Branch C',
+        43,
+        'Northway St',
+        'District 1',
+        'City C',
+        'Region 1',
+        'branchA@example.com',
+        'E003'
+    ),
+    (
+        'Branch D',
+        76,
+        'Sidelane St',
+        'District 2',
+        'City D',
+        'Region 2',
+        'branchB@example.com',
+        'E004'
     );
 
 INSERT INTO BranchPhone (branchName, phoneNumber)
-VALUES ('Branch A', '1234567890'),
-    ('Branch B', '0987654321');
+VALUES 
+	('Branch A', '1234567890'),
+    ('Branch B', '0987654321'), 
+	('Branch C', '1214547890'),
+    ('Branch D', '0952556321');
+
 
 INSERT INTO BranchFax (branchName, faxNumber)
-VALUES ('Branch A', '1112223333'),
-    ('Branch B', '4445556666');
-
-INSERT INTO EmployeePhone (employeeID, phoneNumber)
-VALUES ('E001', '1234567890'),
-    ('E002', '0987654321');
-
+VALUES 
+	('Branch A', '1112223333'),
+    ('Branch B', '4445556666'),
+    ('Branch C', '3311122233'),
+    ('Branch D', '6644455566');
 SET FOREIGN_KEY_CHECKS = 1;
