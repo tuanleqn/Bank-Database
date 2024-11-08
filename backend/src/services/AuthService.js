@@ -98,6 +98,7 @@ class AuthService {
             req.session.user = {
               id: user.id,
               role: user.role,
+              email: user.email,
             };
 
             resolve({
