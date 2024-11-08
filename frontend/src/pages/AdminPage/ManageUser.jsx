@@ -1,14 +1,14 @@
 import { Table } from 'antd';
 
-function AdminPage() {
+function ManageUsers() {
     const dataUsers = Array.from({ length: 10 }, (_, index) => ({
         id: `22100${index + 1}`,
-        name: 'Nguyễn Văn A',
+        name: `Nguyễn Văn A`,
     }));
 
     const columnsUsers = [
         {
-            title: <span style={{ fontWeight: '600' }}>MSSV</span>,
+            title: <span style={{ fontWeight: '600' }}>ID</span>,
             dataIndex: 'id',
         },
         {
@@ -119,4 +119,4 @@ function AdminPage() {
     );
 }
 
-export default AdminPage;
+export default ManageUsers;

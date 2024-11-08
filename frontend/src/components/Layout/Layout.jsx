@@ -17,16 +17,6 @@ function Header() {
         }
     };
 
-    useEffect(() => {
-        const items = document.querySelectorAll('.headerNav li');
-        items.forEach((item) => {
-            item.addEventListener('click', () => {
-                items.forEach((i) => i.classList.remove('bg-primary'));
-                item.classList.add('bg-primary');
-            });
-        });
-    }, []);
-
     return (
         <div className="mx-6 flex  items-center  rounded-2xl bg-opacity-10 bg-gradient-to-r from-[#DBE2EF] to-[#64768C] px-6 py-2">
             <div className="mr-[150px] flex items-center">
@@ -34,9 +24,28 @@ function Header() {
                 <p className="ml-4 text-xl font-semibold">Bank</p>
             </div>
             <ul className="headerNav mr-auto flex gap-4 font-medium text-textColor border-l-2 pl-4 border-primary">
-                <li className="rounded-lg bg-primary px-4 py-1 text-white hover:bg-primary">
-                    <Link to="">Trang chủ</Link>
-                </li>
+                {localStorage.getItem('role') === 'admin' ? (
+                    <>
+                        <li
+                            className={`rounded-lg  px-4 py-1 text-white hover:bg-primary ${
+                                window.location.pathname === '/admin/manage-users' ? 'bg-primary' : ''
+                            } `}
+                        >
+                            <Link to="/admin/manage-users">Quản lý người dùng</Link>
+                        </li>
+                        <li
+                            className={`rounded-lg  px-4 py-1 text-white hover:bg-primary ${
+                                window.location.pathname === '/admin/manage-employees' ? 'bg-primary' : ''
+                            } `}
+                        >
+                            <Link to="/admin/manage-employees">Quản lý nhân viên</Link>
+                        </li>
+                    </>
+                ) : (
+                    <li className="rounded-lg bg-primary px-4 py-1 text-white hover:bg-primary">
+                        <Link to="/user">Trang người dùng</Link>
+                    </li>
+                )}
             </ul>
             <div className="relative flex items-center group ">
                 <img
@@ -56,8 +65,6 @@ function Header() {
         </div>
     );
 }
-
-
 
 function Layout({ children }) {
     return (

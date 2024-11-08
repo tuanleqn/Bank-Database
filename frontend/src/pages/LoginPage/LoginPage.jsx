@@ -86,7 +86,7 @@ function Login() {
                 localStorage.setItem('role', data.role);
                 toast.success('Đăng nhập thành công!');
                 setTimeout(() => {
-                    navigate('/user');
+                    data.role === 'admin' ? navigate('/admin/manage-users') : navigate('/user');
                 }, 1500);
             } else {
                 toast.error(data.message);

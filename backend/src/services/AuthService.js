@@ -44,15 +44,14 @@ class AuthService {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const [result] = await db.query(
-        "INSERT INTO user (ten, email, password, role) VALUES (?, ?, ?, ?)",
-        [name, email, hashedPassword, "user"]
+        "INSERT INTO user (email, password, role) VALUES (?, ?, ?)",
+        [email, hashedPassword, "user"]
       );
 
       // Kiểm tra kết quả thêm người dùng
       if (result.affectedRows === 1) {
         return {
           status: true,
-          name,
           email,
           role: "user",
         };

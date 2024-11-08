@@ -1,6 +1,7 @@
 import { Table } from 'antd';
 
-function userPage() {
+function UserPage() {
+    
     const dataAccouts = Array.from({ length: 10 }, (_, index) => ({
         type: 'Tài khoản vay',
         id: `22100${index + 1}`,
@@ -88,4 +89,4 @@ function userPage() {
     );
 }
 
-export default userPage;
+export default UserPage;
