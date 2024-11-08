@@ -1,3 +1,4 @@
+
 -- test data for api/full-customer-information-by-id
 
 INSERT INTO Customer (
@@ -38,3 +39,4 @@ CREATE TABLE user (
 INSERT INTO user (email, password, role) VALUES
 ('admin1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'admin'), 
 ('user1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'user');
+

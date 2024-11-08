@@ -270,5 +270,14 @@ VALUES ('Branch A', '1112223333'),
 INSERT INTO EmployeePhone (employeeID, phoneNumber)
 VALUES ('E001', '1234567890'),
     ('E002', '0987654321');
-
 SET FOREIGN_KEY_CHECKS = 1;
+
+// --------------------
+CREATE TABLE user (
+	id 			int not null auto_increment,
+    email 		varchar(50) not null,
+    password 	varchar(128) not null,
+    role		varchar(50) not null default 'user',
+    primary 	key (id)
+);
+

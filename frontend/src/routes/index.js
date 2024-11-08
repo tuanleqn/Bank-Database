@@ -1,7 +1,9 @@
-import AdminPage from '../pages/AdminPage/AdminPage';
+import ManageEmployee from '../pages/AdminPage/ManageEmployee';
+import ManageUser from '../pages/AdminPage/ManageUser';
 import UserPage from '../pages/UserPage/UserPage';
 import LandingPage from '../pages/LandingPage/LandingPage';
 import LoginPage from '../pages/LoginPage/LoginPage';
+import RegisterPage from '../pages/RegisterPage/RegisterPage';
 
 const routes = [
     {
@@ -9,8 +11,13 @@ const routes = [
         component: LandingPage,
     },
     {
-        path: '/admin',
-        component: AdminPage,
+        path: '/admin/manage-users',
+        component: ManageUser,
+        layout: true,
+    },
+    {
+        path: '/admin/manage-employees',
+        component: ManageEmployee,
         layout: true,
     },
     {
@@ -21,6 +28,10 @@ const routes = [
     {
         path: '/auth/login',
         component: LoginPage,
+    },
+    {
+        path: '/auth/register',
+        component: RegisterPage,
     },
 ];
 
