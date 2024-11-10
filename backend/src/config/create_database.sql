@@ -298,3 +298,18 @@ VALUES
     ('Branch C', '3311122233'),
     ('Branch D', '6644455566');
 SET FOREIGN_KEY_CHECKS = 1;
+
+INSERT INTO EmployeePhone (employeeID, phoneNumber)
+VALUES ('E001', '1234567890'),
+    ('E002', '0987654321');
+SET FOREIGN_KEY_CHECKS = 1;
+
+// --------------------
+CREATE TABLE user (
+	id 			int not null auto_increment,
+    email 		varchar(50) not null UNIQUE CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
+    password 	varchar(128) not null,
+    role		varchar(50) not null default 'user',
+    primary 	key (id)
+);
+

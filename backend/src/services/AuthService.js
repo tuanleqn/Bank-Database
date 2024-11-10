@@ -15,7 +15,53 @@ class AuthService {
     });
   };
 
-  createUser = async (data) => {};
+  createUser = async (data) => {
+    const { email, password, name } = data;
+
+    const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+    
+    if (!isValidEmail(email)) {
+      return { status: false, message: "Email không hợp lệ" };
+    }
+
+    try {
+      const [existingUsers] = await db.query(
+        "SELECT email FROM user WHERE email = ? ",
+        email
+      );
+
+      if (existingUsers.length > 0) {
+        const userExistsMessage =
+          existingUsers[0].email === email
+            ? "Email đã được dùng"
+            : "Người dùng đã tạo tài khoản";
+        return { status: false, message: userExistsMessage };
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const [result] = await db.query(
+        "INSERT INTO user (email, password, role) VALUES (?, ?, ?)",
+        [email, hashedPassword, "user"]
+      );
+
+      // Kiểm tra kết quả thêm người dùng
+      if (result.affectedRows === 1) {
+        return {
+          status: true,
+          email,
+          role: "user",
+        };
+      } else {
+        return { status: false, message: "Không thể tạo tài khoản" };
+      }
+    } catch (error) {
+      throw error; // Nếu có lỗi, ném ra để hàm gọi có thể bắt lỗi
+    }
+  };
 
   logout = (req) => {
     return new Promise((resolve, reject) => {

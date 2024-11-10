@@ -213,15 +213,10 @@ VALUES
     ('0904123456', (SELECT customerCode FROM Customer WHERE firstName = 'David')),
     ('0905123456', (SELECT customerCode FROM Customer WHERE firstName = 'Eve'));
 
-CREATE TABLE user (
-	id 			int not null auto_increment,
-    email 		varchar(50) not null UNIQUE CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
-    password 	varchar(128) not null,
-    role		varchar(50) not null default 'user',
-    primary 	key (id)
-);
+
 
 -- TK: là email, MK: 123456
 INSERT INTO user (email, password, role) VALUES
 ('admin1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'admin'), 
 ('user1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'user');
+
