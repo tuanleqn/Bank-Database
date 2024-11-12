@@ -1,14 +1,12 @@
 const customerService = require('../service/customerService');
 
-const getCustomerData = async (req, res) => {
+const getAllCustomers = async (req, res) => {
     try {
-        const customerId = req.params.id;
-        const customerData = await customerService.getCustomerAndAccounts(customerId);
-        if (!customerData.customer) return res.status(404).json({ message: 'Customer not found' });
-        res.json(customerData);
+        const customersData = await customerService.getAllCustomersAndAccounts();
+        res.json(customersData);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-module.exports = { getCustomerData };
+module.exports = { getAllCustomers };
