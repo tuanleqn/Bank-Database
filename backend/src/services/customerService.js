@@ -1,22 +1,26 @@
 const db = require('../config/dbConfig');
 
-const getCustomerAndAccounts = (customerId) => {
+const getAllCustomersAndAccounts = () => {
     return new Promise((resolve, reject) => {
-        let customerData = {};
+        let customersData = [];
 
-        db.query('SELECT * FROM customers WHERE id = ?', [customerId], (err, result) => {
+        db.query('SELECT * FROM customers', (err, customers) => {
             if (err) return reject(err);
-            if (result.length === 0) return resolve({ customer: null });
 
-            customerData.customer = result[0];
+            const customerIds = customers.map(cust => cust.id);
 
-            db.query('SELECT * FROM accounts WHERE customerId = ?', [customerId], (err, accounts) => {
+            db.query('SELECT * FROM accounts WHERE customerId IN (?)', [customerIds], (err, accounts) => {
                 if (err) return reject(err);
-                customerData.accounts = accounts;
-                resolve(customerData);
+
+                customersData = customers.map(customer => ({
+                    ...customer,
+                    accounts: accounts.filter(account => account.customerId === customer.id)
+                }));
+
+                resolve(customersData);
             });
         });
     });
 };
 
-module.exports = { getCustomerAndAccounts };
+module.exports = { getAllCustomersAndAccounts };
