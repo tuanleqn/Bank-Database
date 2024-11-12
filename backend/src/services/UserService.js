@@ -1,12 +1,21 @@
 const db = require("../config/db");
 
 class UserService {
-  getUserById = async (id) => {
+  getCustomerByEmail = async (email) => {
     try {
-      const user = "get_user_by_id success";
-      return user;
+      const [rows] = await db.query(
+        `SELECT * FROM Customer WHERE email = ?`,
+        [email]
+      );
+
+      if (rows.length === 0) {
+        return { message: "Không tìm thấy khách hàng với email này." };
+      }
+
+      return rows[0];
     } catch (error) {
-      throw new Error("Error fetching user by ID: " + error.message);
+      console.error("Lỗi khi truy vấn dữ liệu khách hàng:", error);
+      throw new Error("Lỗi khi truy vấn dữ liệu khách hàng.");
     }
   };
 

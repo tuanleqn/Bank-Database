@@ -11,9 +11,8 @@ class AuthController {
     }
 
     createUser = async (req, res) => {
-        try {
-            const result = await AuthService.createUser(req.body);
-            // console.log(result);
+        try {            
+            const result = await AuthService.createUser(req.body);            
             return res.status(200).send(result);
         } catch(err) {
             return res.status(200).json({status: false, error: err});
