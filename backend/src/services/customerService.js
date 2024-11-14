@@ -1,26 +1,25 @@
-const db = require('../config/dbConfig');
+const db = require('../config/db.js');
 
-const getAllCustomersAndAccounts = () => {
-    return new Promise((resolve, reject) => {
-        let customersData = [];
+const getAllCustomersAndAccounts = async () => {
+    try {
+        // Lấy dữ liệu khách hàng
+        const [customers] = await db.query('SELECT * FROM customer');
 
-        db.query('SELECT * FROM customers', (err, customers) => {
-            if (err) return reject(err);
+        // Lấy dữ liệu tài khoản cho các khách hàng
+        const customerIds = customers.map(cust => cust.customerCode);
+        const [accounts] = await db.query('SELECT * FROM account WHERE customerCode IN (?)', [customerIds]);
 
-            const customerIds = customers.map(cust => cust.id);
+        // Kết hợp dữ liệu khách hàng với tài khoản
+        const customersData = customers.map(customer => ({
+            ...customer,
+            accounts: accounts.filter(account => account.customerCode === customer.customerCode)
+        }));
 
-            db.query('SELECT * FROM accounts WHERE customerId IN (?)', [customerIds], (err, accounts) => {
-                if (err) return reject(err);
-
-                customersData = customers.map(customer => ({
-                    ...customer,
-                    accounts: accounts.filter(account => account.customerId === customer.id)
-                }));
-
-                resolve(customersData);
-            });
-        });
-    });
+        return customersData;
+    } catch (err) {
+        throw err;
+    }
 };
+
 
 module.exports = { getAllCustomersAndAccounts };
