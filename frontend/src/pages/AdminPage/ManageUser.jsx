@@ -1,50 +1,81 @@
+import { render } from '@testing-library/react';
 import { Table } from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState, useRef } from 'react';
 
 function ManageUsers() {
-    const dataUsers = Array.from({ length: 10 }, (_, index) => ({
-        id: `22100${index + 1}`,
-        name: `Nguyễn Văn A`,
-    }));
+    const [dataUsers, setDataUsers] = useState([]);
+    const [dataAccouts, setDataAccouts] = useState([]);
+    const [customerActive, setCustomerActive] = useState(null);
 
-    const columnsUsers = [
+    const columnsCustomers = [
         {
             title: <span style={{ fontWeight: '600' }}>ID</span>,
-            dataIndex: 'id',
+            dataIndex: 'customerCode',
+        },
+        {
+            title: <span style={{ fontWeight: '600' }}>Họ</span>,
+            dataIndex: 'lastName',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Tên</span>,
-            dataIndex: 'name',
+            dataIndex: 'firstName',
         },
     ];
 
-    const dataAccouts = Array.from({ length: 10 }, (_, index) => ({
-        type: 'Tài khoản vay',
-        id: `22100${index + 1}`,
-    }));
-
     const columnsAccounts = [
-        
         {
             title: <span style={{ fontWeight: '600' }}>Loại tài khoản</span>,
-            dataIndex: 'type',
+            dataIndex: 'accountType',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Mã số</span>,
-            dataIndex: 'id',
-        }, 
+            dataIndex: 'accountNumber',
+        },
         {
             title: <span style={{ fontWeight: '600' }}>Số dư</span>,
             dataIndex: 'id',
-        },       
+        },
         {
             title: <span style={{ fontWeight: '600' }}>Lãi suất</span>,
             dataIndex: 'id',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Ngày mở / Ngày vay</span>,
-            dataIndex: 'id',
+            dataIndex: 'openDate',
         },
     ];
+
+    useEffect(() => {
+        const apiCustomer = 'http://localhost:3001/customer/all_customer';
+        axios
+            .get(`${apiCustomer}`)
+            .then((response) => {
+                setDataUsers(response.data);
+
+                const accounts = response.data.map((customer) => customer.accounts);
+                setDataAccouts(accounts.flat());
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
+    useEffect(() => {
+        const listCus = document.querySelectorAll('.ant-table-row');
+        let customerCode = '';
+
+        listCus.forEach((item) => {
+            item.addEventListener('click', () => {
+                customerCode = item.children[0].innerText;
+                dataUsers.forEach((customer) => {
+                    if (customer.customerCode === customerCode) {
+                        setCustomerActive(customer);
+                    }
+                });
+            });
+        });
+    }, [dataUsers]);
 
     return (
         <div className="flex  gap-12 ">
@@ -59,7 +90,7 @@ function ManageUsers() {
 
                 <div className="overflow-auto mt-6 h-[490px]">
                     <Table
-                        columns={columnsUsers}
+                        columns={columnsCustomers}
                         dataSource={dataUsers}
                         className="rounded-lg  border-[1px] border-[#EFF1F3] shadow"
                     />
@@ -82,19 +113,27 @@ function ManageUsers() {
                         <div className="left space-y-2 ml-24 font-semibold">
                             <p>
                                 Họ và tên:
-                                <span className="ml-2 font-normal"> Nguyễn Văn A</span>
+                                <span className="ml-2 font-normal">
+                                    {customerActive
+                                        ? customerActive?.lastName + ' ' + customerActive?.firstName
+                                        : '---'}
+                                </span>
                             </p>
                             <p>
-                                Mã số: <span className="ml-2 font-normal"> 2217639</span>
+                                Mã số:{' '}
+                                <span className="ml-2 font-normal"> {customerActive?.customerCode || '---'}</span>
                             </p>
                             <p>
-                                Email: <span className="ml-2 font-normal"> abc@hcmut.edu.vn</span>
+                                Email: <span className="ml-2 font-normal"> {customerActive?.email || '---'}</span>
                             </p>
                             <p>
-                                Số điện thoại: <span className="ml-2 font-normal"> 19006791</span>
+                                Số điện thoại: <span className="ml-2 font-normal"> {customerActive?.phoneNumber || '---'}</span>
                             </p>
                             <p>
-                                Khoa: <span className="ml-2 font-normal"> Khoa học và kĩ thuật máy tính</span>
+                                Địa chỉ nhà: <span className="ml-2 font-normal"> {customerActive?.homeAddress || '---'}</span>
+                            </p>
+                            <p>
+                                Địa chỉ công ty: <span className="ml-2 font-normal"> {customerActive?.officeAddress || '---'}</span>
                             </p>
                         </div>
                     </div>
@@ -107,12 +146,12 @@ function ManageUsers() {
                     </div>
 
                     <div className="overflow-auto h-[320px] flex-grow mt-6">
-                    <Table
-                        columns={columnsAccounts}
-                        dataSource={dataAccouts}
-                        className="rounded-lg  border-[1px] border-[#EFF1F3] shadow"
-                    />
-                </div>
+                        <Table
+                            columns={columnsAccounts}
+                            dataSource={dataAccouts}
+                            className="rounded-lg  border-[1px] border-[#EFF1F3] shadow"
+                        />
+                    </div>
                 </div>
             </div>
         </div>

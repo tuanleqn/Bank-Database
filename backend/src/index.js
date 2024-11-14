@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3001;
 const session = require('express-session');
-const customerRoutes = require('./src/routes/customerRoutes');
 
 app.use(cors({
   origin: "http://localhost:3000",
@@ -15,7 +14,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use('/', customerRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(cookieParser());
