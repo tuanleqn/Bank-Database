@@ -20,6 +20,10 @@ function Header() {
 }
 
 function LandingPage() {
+    const role = localStorage.getItem('role');
+    let url =''
+    role === 'admin' ? url = '/admin' : url = '/user'
+
     return (
         <div className="p-4">
             <Header />
@@ -34,7 +38,7 @@ function LandingPage() {
                         cầu của khách hàng. Chúng tôi cam kết mang lại trải nghiệm quản lý tài chính tối ưu và an toàn
                         cho quý khách hàng.
                     </p>
-                    <Link to={"/user"} className="mt-6 size-fit">
+                    <Link to={`${url}`} className="mt-6 size-fit">
                         <button className="mr-auto rounded-xl bg-primary px-4 py-2 font-medium text-white shadow-inner hover:shadow-white">
                             Truy cập tài khoản
                         </button>

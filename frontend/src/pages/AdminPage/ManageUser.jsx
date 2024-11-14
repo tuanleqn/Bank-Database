@@ -50,6 +50,15 @@ function ManageUsers() {
         const addAccountBox = document.querySelector('.addAccountBox');
         addAccountBox.classList.toggle('hidden');
         addAccountBox.classList.toggle('flex');
+
+        resetInput();
+    };
+
+    const resetInput = () => {
+        const input = document.querySelectorAll('input');
+        input.forEach((item) => {
+            item.value = '';
+        });
     };
 
     const handleAddAccount = () => {
@@ -69,7 +78,6 @@ function ManageUsers() {
             };
             customerCode = customerActive.customerCode;
         }
-        console.log(customerCode, typeAccount, data);
 
         axios
             .post(`${apiAddAccount}`, {
@@ -78,31 +86,28 @@ function ManageUsers() {
                 additionalData: data,
             })
             .then((response) => {
-                console.log(response);
+                alert(response.data.message);
+                resetInput();
             })
             .catch((error) => {
-                console.error(error);
+                alert(error.response.data.message);
             });
     };
 
     useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const apiCustomer = 'http://localhost:3001/customer/all_customer';
-                const response = await axios.get(apiCustomer);
-    
-                if (response && response.data) {
-                    setDataUsers(response.data);
-    
-                    const accounts = response.data.map((customer) => customer.accounts || []);
-                    setDataAccouts(accounts.flat());
-                }
-            } catch (error) {
-                console.error("Error fetching customers:", error);
-            }
-        };
-    
-        fetchCustomers();
+        const apiCustomer = 'http://localhost:3001/customer/all_customer';
+        axios
+            .get(`${apiCustomer}`,{
+                withCredentials: true,
+            })
+            .then((response) => {
+                setDataUsers(response.data);
+                const accounts = response.data.map((customer) => customer.accounts);
+                setDataAccouts(accounts.flat());
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, []);
 
     useEffect(() => {
@@ -227,6 +232,7 @@ function ManageUsers() {
                                         id="type"
                                         class="w-full p-2 border-2 border-gray-300 rounded-lg bg-gray-100 text-gray-800 focus:outline-none focus:border-blue-200 focus:bg-white transition duration-300 ease-in-out"
                                     >
+                                        <option value="null">Chọn loại tài khoản</option>
                                         <option value="Savings">Tài khoản tiết kiệm</option>
                                         <option value="Checking">Tài khoản thanh toán</option>
                                         <option value="Loan">Tài khoản vay</option>
