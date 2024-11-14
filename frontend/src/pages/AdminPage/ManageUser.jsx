@@ -95,23 +95,19 @@ function ManageUsers() {
     };
 
     useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const apiCustomer = 'http://localhost:3001/customer/all_customer';
-                const response = await axios.get(apiCustomer);
-    
-                if (response && response.data) {
-                    setDataUsers(response.data);
-    
-                    const accounts = response.data.map((customer) => customer.accounts || []);
-                    setDataAccouts(accounts.flat());
-                }
-            } catch (error) {
-                console.error("Error fetching customers:", error);
-            }
-        };
-    
-        fetchCustomers();
+        const apiCustomer = 'http://localhost:3001/customer/all_customer';
+        axios
+            .get(`${apiCustomer}`,{
+                withCredentials: true,
+            })
+            .then((response) => {
+                setDataUsers(response.data);
+                const accounts = response.data.map((customer) => customer.accounts);
+                setDataAccouts(accounts.flat());
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, []);
 
     useEffect(() => {
