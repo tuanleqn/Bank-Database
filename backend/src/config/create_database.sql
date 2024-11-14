@@ -9,7 +9,6 @@ CREATE TABLE Customer (
     lastName VARCHAR(50) NOT NULL CHECK (TRIM(lastName) <> ''), 
     homeAddress VARCHAR(255) NOT NULL CHECK (TRIM(homeAddress) <> ''),
     officeAddress VARCHAR(255), 
-    phoneNumber VARCHAR(15) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE CHECK (email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'), 
     dob DATE NOT NULL,
     guardianConfirmation BOOLEAN

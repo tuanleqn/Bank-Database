@@ -19,7 +19,7 @@ class UserService {
     }
   };
 
-  addAccount = async (customerCode, accountType, additionalData) => {
+  addAccount = async (customerCode, accountType, additionalData) => {    
     try {
       let accountNumber = '';
       const queryGetAccountNumber = `SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`;
