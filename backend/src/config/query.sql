@@ -22,24 +22,24 @@ CALL SortEmployeesByCustomers('2024-01-01', '2024-11-01');
 
 -- 3.4
 SELECT 
-    e.employeeID,
-    CONCAT(e.firstName, ' ', e.lastName) AS EmployeeName,
-    e.branchName,
-    CASE 
-        WHEN b.employeeID IS NOT NULL THEN 'Manager'
-        ELSE 'Staff'
-    END AS Position,
-    c.customerCode,
-    CONCAT(c.firstName, ' ', c.lastName) AS CustomerName,
-    c.email,
-    s.dateOfServing
-FROM 
-    ServedDate s
-JOIN 
-    Employee e ON s.eID = e.employeeID
-JOIN 
-    Customer c ON s.cID = c.customerCode
-LEFT JOIN 
-    Branch b ON e.employeeID = b.employeeID 
-ORDER BY 
-    s.dateOfServing DESC;
+            e.employeeID,
+            CONCAT(e.firstName, ' ', e.lastName) AS employeeName,
+            e.branchName,
+            CASE 
+                WHEN b.employeeID IS NOT NULL THEN 'Manager'
+                ELSE 'Staff'
+            END AS position,
+            c.customerCode,
+            CONCAT(c.firstName, ' ', c.lastName) AS customerName,
+            c.email,
+            s.dateOfServing
+        FROM 
+            ServedDate s
+        JOIN 
+            Employee e ON s.eID = e.employeeID
+        JOIN 
+            Customer c ON s.cID = c.customerCode
+        LEFT JOIN 
+            Branch b ON e.employeeID = b.employeeID 
+        ORDER BY 
+            s.dateOfServing DESC;

@@ -4,6 +4,7 @@ import UserPage from '../pages/UserPage/UserPage';
 import LandingPage from '../pages/LandingPage/LandingPage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import RegisterPage from '../pages/RegisterPage/RegisterPage';
+import ServiceReport from '../pages/AdminPage/ServiceReport';
 
 const routes = [
     {
@@ -18,6 +19,11 @@ const routes = [
     {
         path: '/admin/manage-employees',
         component: ManageEmployee,
+        layout: true,
+    },
+    {
+        path: '/admin/service-report',
+        component: ServiceReport,
         layout: true,
     },
     {

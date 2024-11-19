@@ -28,7 +28,7 @@ class UserController {
     const { customerCode, accountType, additionalData } = req.body;
     try {
       const result = await UserService.addAccount(customerCode, accountType, additionalData);
-      res.status(200).json({ message: result });
+      return res.status(200).json({ message: result });
     } catch (error) {
       if (error.message === "Account not found") {
         return res.status(404).json({ message: "Account not found" });
@@ -43,7 +43,7 @@ class UserController {
     const updatedData = req.body.updatedData;
     try {
       const result = await UserService.updateAccount(accountNumber, updatedData);
-      res.status(200).json({ message: result });
+      return res.status(200).json({ message: result });
     } catch (error) {
       if (error.message === "Account not found") {
         return res.status(404).json({ message: "Account not found" });
@@ -57,7 +57,7 @@ class UserController {
     const accountNumber = req.params.accountNumber;
     try {
       const result = await UserService.deleteAccount(accountNumber);
-      res.status(200).json({ message: result });
+      return res.status(200).json({ message: result });
     } catch (error) {
       if (error.message === "Account not found") {
         return res.status(404).json({ message: "Account not found" });
