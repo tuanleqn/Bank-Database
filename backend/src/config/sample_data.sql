@@ -74,7 +74,6 @@ INSERT INTO Customer
     lastName,
     homeAddress,
     officeAddress,
-    phoneNumber,
     email,
     dob,
     guardianConfirmation
@@ -85,7 +84,6 @@ VALUES
     'Nguyen',
     '123 Nguyen Trai',
     '456 Le Loi',
-    '0901123456',
     'admin1@hcmut.edu.vn',
     '1990-01-15',
     FALSE
@@ -95,7 +93,6 @@ VALUES
     'Pham',
     '789 Tran Hung Dao',
     NULL,
-    '0902123456',
     'user1@hcmut.edu.vn',
     '1985-05-22',
     FALSE
@@ -105,7 +102,6 @@ VALUES
     'Tran',
     '321 Binh Tan',
     '654 Pham Van Dong',
-    '0903123456',
     'charlie.tran@example.com',
     '1995-07-10',
     FALSE
@@ -115,7 +111,6 @@ VALUES
     'Le',
     '102 Hoang Hoa Tham',
     NULL,
-    '0904123456',
     'david.le@example.com',
     '2007-03-14',
     TRUE
@@ -125,11 +120,20 @@ VALUES
     'Hoang',
     '456 Hai Ba Trung',
     '789 Tan Binh',
-    '0905123456',
     'eve.hoang@example.com',
     '1998-08-21',
     FALSE
+    ),
+    ('CS006',
+    'Alice',
+    'Nguyen',
+    '123 Nguyen Trai',
+    '456 Le Loi',
+    'admin3@hcmut.edu.vn',
+    '1990-01-15',
+    FALSE
     );
+
 -- Account
 INSERT INTO Account (
 	accountNumber,  
@@ -161,6 +165,18 @@ VALUES
         'CS005',
         'Checking',
 		'2022-05-22'
+    ),
+     (
+		'AC005',
+        'CS006',
+        'Checking',
+		'2022-05-22'
+    ),
+     (
+		'AC006',
+        'CS006',
+        'Savings',
+		'2022-05-22'
     );
 INSERT INTO CheckingAccount
 	(
@@ -175,6 +191,10 @@ VALUE
     (
 		'AC004',
         10115000
+    ),
+    (
+		'AC005',
+        10153000
     );
 INSERT INTO SavingsAccount
 	(
@@ -187,6 +207,11 @@ VALUE
 		'AC002',
         0.06,
         236765000	
+    ),
+    (
+		'AC006',
+        0.07,
+        10115000
     );
     
 INSERT INTO LoanAccount
@@ -207,11 +232,13 @@ VALUE
 -- Thêm số điện thoại cho khách hàng vào bảng CustomerPhoneNumber
 INSERT INTO CustomerPhoneNumber (phoneNumber, customerCode)
 VALUES
-    ('0901123456', (SELECT customerCode FROM Customer WHERE firstName = 'Alice')),
-    ('0902123456', (SELECT customerCode FROM Customer WHERE firstName = 'Bob')),
-    ('0903123456', (SELECT customerCode FROM Customer WHERE firstName = 'Charlie')),
-    ('0904123456', (SELECT customerCode FROM Customer WHERE firstName = 'David')),
-    ('0905123456', (SELECT customerCode FROM Customer WHERE firstName = 'Eve'));
+    ('0901123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS001')),
+    ('0902123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS002')),
+    ('0903123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS003')),
+    ('0904123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS004')),
+    ('0905123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS005')),
+	('0905123123', (SELECT customerCode FROM Customer WHERE customerCode = 'CS006'));
+
 
 
 
