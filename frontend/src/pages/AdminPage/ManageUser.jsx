@@ -105,11 +105,12 @@ function ManageUsers() {
             })
             .then((response) => {
                 resetInput();
-                alert(response.data.message);
+                toggleAddAccount();
+                alert("Tài khoản đã được thêm thành công");
             })
             .catch((error) => {
                 console.log(error.response.data.message);                
-                alert(error.response.data.message);
+                alert("Có lỗi xảy ra khi thêm tài khoản");
             });
     };
 
