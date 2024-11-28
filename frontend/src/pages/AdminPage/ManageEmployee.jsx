@@ -6,7 +6,7 @@ function ManageEmployee() {
     const data = Array.from({ length: 10 }, (_, index) => ({
         id: `22100${index + 1}`,
         name: `Hoang Thi ${String.fromCharCode(65 + index)}`,
-        quantity: index + index*2,
+        quantity: index + index * 2,
     }));
 
     const columns = [
@@ -24,16 +24,16 @@ function ManageEmployee() {
         },
     ];
 
-  
 
-  return (
-    <div className="overflow-auto mt-6 h-[490px]">
-    <Table
-        columns={columns}
-        dataSource={data}
-        className="rounded-lg  border-[1px] border-[#EFF1F3] shadow"
-    />
-</div>
-  );
-}   
+
+    return (
+        <div className="overflow-auto mt-6 h-[490px]">
+            <Table
+                columns={columns}
+                dataSource={data}
+                className="rounded-lg  border-[1px] border-[#EFF1F3] shadow"
+            />
+        </div>
+    );
+}
 export default ManageEmployee;

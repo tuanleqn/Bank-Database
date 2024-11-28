@@ -8,7 +8,6 @@
 
 .ServiceReport .service-report-filter {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     height: 45px;
     margin-bottom: 20px;
@@ -19,6 +18,25 @@
     flex-direction: row;
     align-items: center;
     height: 100%;
+}
+
+.ServiceReport .service-report-filter .ant-space-item .btn-procedure {
+    --COLOR-primary: #ff5722;
+    display: flex;
+    height: 45px;
+    margin-left: 32px;
+    align-items: center;
+    background-color: var(--COLOR-primary);
+    color: #FFFFFF;
+    padding: 0 32px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.ServiceReport .service-report-filter .ant-space-item .btn-procedure:hover {
+    --COLOR-primary-hover: #e64a19;
+    cursor: pointer;
+    background-color: var(--COLOR-primary-hover);
 }
 
 .ServiceReport .service-report-filter .ant-space-item>div>p {
@@ -96,4 +114,16 @@
 
 .ServiceReport .ant-table-wrapper .ant-table-filter-column>span:last-child {
     margin-right: 15px;
+}
+
+.ant-modal-root .ant-modal-wrap .modal-procedure {
+    width: 1000px !important;
+}
+
+.ant-modal-root .ant-modal-wrap .modal-procedure .ant-modal-content .ant-modal-header {
+    margin-bottom: 20px;
+}
+
+.ant-modal-root .ant-modal-wrap .modal-procedure .ant-modal-content .ant-modal-body .ant-table-wrapper {
+    display: block;
 }
