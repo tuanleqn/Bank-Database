@@ -4,21 +4,24 @@ DELIMITER $$
 CREATE PROCEDURE SortEmployeesByCustomers (IN StartDate DATE, IN EndDate DATE)
 BEGIN
     SELECT 
-        eID,
-        COUNT(DISTINCT cID) AS NumCustomers
+        CONCAT(Employee.firstName, ' ', Employee.lastName) AS eName,
+        ServedDate.eID AS eID,
+        COUNT(DISTINCT ServedDate.cID) AS totalServe
     FROM 
         ServedDate
+    JOIN 
+        Employee ON ServedDate.eID = Employee.employeeID
     WHERE 
         dateOfServing BETWEEN StartDate AND EndDate
     GROUP BY 
-        eID
+        ServedDate.eID, Employee.firstName, Employee.lastName
     ORDER BY 
-        NumCustomers DESC;
+        totalServe DESC;
 END$$
 
 DELIMITER ;
 
-CALL SortEmployeesByCustomers('2024-01-01', '2024-11-01');
+CALL SortEmployeesByCustomers('2024-10-01', '2024-10-11');
 
 -- 3.4
 SELECT 

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import './ServiceReport.css'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import React, { useState, useEffect } from "react";
-import { Space, DatePicker } from "antd";
+import { Space, DatePicker, Modal, Button, notification } from "antd";
 import CustomTable from '../../../components/Common/CustomTable';
 
 dayjs.extend(customParseFormat)
@@ -11,10 +11,15 @@ const { RangePicker } = DatePicker
 
 function ServiceReport() {
     const [data, setData] = useState([])
+    const [open, setOpen] = useState(false)
     const [filteredData, setFilteredData] = useState([])
     const [isLoading, setLoading] = useState(true)
+    const [filteredDataP, setFilteredDataP] = useState([])
+    const [isLoadingP, setLoadingP] = useState(true)
     const [searchText, setSearchText] = useState('')
     const [searchedColumn, setSearchedColumn] = useState('')
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
 
     const disabledDate = (current) => {
         return current && current > dayjs().endOf('day')
@@ -36,17 +41,54 @@ function ServiceReport() {
     const handleDateChange = (values) => {
         if (values && values.length === 2) {
             const [start, end] = values;
-            const startDate = new Date(formatDate(start, 'ymd'));
-            const endDate = new Date(formatDate(end, 'ymd'));
+            const sDate = new Date(formatDate(start, 'ymd'));
+            const eDate = new Date(formatDate(end, 'ymd'));
+            setStartDate(sDate);
+            setEndDate(eDate)
             setFilteredData(
                 data.filter(item => {
                     const dateOfServing = new Date(formatDate(item.dateOfServing, 'ymd'));
-                    console.log(dateOfServing, startDate, endDate, dateOfServing >= startDate)
-                    return dateOfServing >= startDate && dateOfServing <= endDate;
+                    return dateOfServing >= sDate && dateOfServing <= eDate;
                 })
             )
         }
+    }
+
+    const openNotification = () => {
+        notification.error({
+            message: 'Vui lòng chọn ngày!',
+            description: 'Thông báo này sẽ tự động đóng sau 2 giây.',
+            duration: 2,
+        });
     };
+
+    const showModal = async () => {
+        if (startDate !== '' && endDate !== '') {
+            try {
+                const response = await axios.post('http://localhost:3001/admin/total-serve', {
+                    startDate: formatDate(startDate, 'ymd'),
+                    endDate: formatDate(endDate, 'ymd'),
+                });
+                setFilteredDataP(
+                    response.data.data[0].map((item, index) => ({
+                        ...item,
+                        stt: index + 1,
+                        key: index,
+                    }))
+                );
+                setLoadingP(false);
+                setOpen(true)
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        } else {
+            openNotification()
+        }
+    }
+
+    const hideModal = () => {
+        setOpen(false)
+    }
 
 
     const columns = [
@@ -125,6 +167,39 @@ function ServiceReport() {
         }
     ]
 
+    const columnsP = [
+        {
+            title: 'STT',
+            dataIndex: 'stt',
+            key: 'stt',
+            width: 50,
+            fixed: 'left',
+            isSearched: false,
+        },
+        {
+            title: 'Mã nhân viên',
+            width: 100,
+            dataIndex: 'eID',
+            key: 'eID',
+            fixed: 'left',
+            isSearched: true,
+        },
+        {
+            title: 'Tên nhân viên',
+            width: 140,
+            dataIndex: 'eName',
+            key: 'eName',
+            isSearched: true,
+        },
+        {
+            title: 'Số khách hàng đảm nhận',
+            dataIndex: 'totalServe',
+            key: 'totalServe',
+            width: 100,
+            sorter: (a, b) => a.totalServe - b.totalServe,
+        }
+    ]
+
     useEffect(() => {
         axios
             .get(`http://localhost:3001/admin/service-report`)
@@ -164,6 +239,32 @@ function ServiceReport() {
                         />
                     </div>
                 </div>
+                <div className="btn-procedure" onClick={showModal}>
+                    Procedure
+                </div>
+                <Modal
+                    title={`Số khách hàng do mỗi nhân viên đảm nhận từ ngày ${formatDate(startDate, 'dmy')} đến ngày ${formatDate(endDate, 'dmy')}!`}
+                    className='modal-procedure'
+                    open={open}
+                    onOk={hideModal}
+                    onCancel={hideModal}
+                    okText="Xác nhận"
+                    footer={[
+                        <Button key="ok" type="primary" onClick={hideModal} style={{ height: 42, width: 72 }}>
+                            OK
+                        </Button>,
+                    ]}
+                >
+                    <CustomTable
+                        columns={columnsP}
+                        data={filteredDataP}
+                        isLoading={isLoadingP}
+                        searchText={searchText}
+                        searchedColumn={searchedColumn}
+                        setSearchText={setSearchText}
+                        setSearchedColumn={setSearchedColumn}
+                    />
+                </Modal>
             </Space>
             <CustomTable
                 columns={columns}

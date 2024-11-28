@@ -31,7 +31,7 @@ function Login() {
                     navigate('/user');
                 }
             } catch (error) {
-                console.error('Lỗi khi kiểm tra đăng nhập.');
+                console.error(error);
             }
         };
         cheklogin();

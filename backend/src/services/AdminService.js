@@ -3,12 +3,14 @@ const db = require("../config/db");
 class AdminService {
     getInforUser = async (req, res) => {
         try {
+
             const user = 'getInforUser success';
             return user;
         } catch (error) {
             throw new Error('Error fetching user by ID: ' + error.message);
         }
     };
+
     getServiceReport = async () => {
         try {
             const [results] = await db.query(`
@@ -40,6 +42,18 @@ class AdminService {
             throw new Error(error.message);
         }
     };
+
+    getTotalServe = async (startDate, endDate) => {
+        try {
+            const [results] = await db.query(`
+                CALL SortEmployeesByCustomers('${startDate}', '${endDate}')
+            `);
+            return results;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    };
+
 
     getInforUser = async (req, res) => {
         try {
@@ -101,16 +115,16 @@ class AdminService {
                     openDate: curr.openDate,
                     loanDetails: curr.loanDateOfTaken
                         ? {
-                              dateOfTaken: curr.loanDateOfTaken,
-                              dueBalance: curr.loanDueBalance,
-                              interestRate: curr.loanInterestRate,
-                          }
+                            dateOfTaken: curr.loanDateOfTaken,
+                            dueBalance: curr.loanDueBalance,
+                            interestRate: curr.loanInterestRate,
+                        }
                         : null,
                     savingDetails: curr.savingInterestRate
                         ? {
-                              interestRate: curr.savingInterestRate,
-                              accountBalance: curr.savingAccountBalance,
-                          }
+                            interestRate: curr.savingInterestRate,
+                            accountBalance: curr.savingAccountBalance,
+                        }
                         : null,
                     checkingDetails: curr.checkingAccountBalance
                         ? { accountBalance: curr.checkingAccountBalance }
