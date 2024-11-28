@@ -15,14 +15,9 @@ const routes = [
         path: '/admin/manage-users',
         component: ManageUser,
         layout: true,
-    },
+    },    
     {
         path: '/admin/manage-employees',
-        component: ManageEmployee,
-        layout: true,
-    },
-    {
-        path: '/admin/service-report',
         component: ServiceReport,
         layout: true,
     },
