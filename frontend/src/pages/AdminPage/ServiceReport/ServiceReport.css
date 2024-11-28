@@ -1,0 +1,99 @@
+.ServiceReport {
+    max-width: 100vw;
+}
+
+.ServiceReport .ant-table-wrapper {
+    display: block;
+}
+
+.ServiceReport .service-report-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 45px;
+    margin-bottom: 20px;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>div>p {
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>div .range-picker-container>div {
+    height: 45px;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>div .range-picker-container .ant-picker-range-separator>span {
+    display: flex;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>button {
+    width: 180px;
+    height: 45px;
+    background-color: var(--COLOR-submit);
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>button>span {
+    font-size: 1.1rem;
+}
+
+.ServiceReport .service-report-filter .ant-space-item>button:hover {
+    background-color: var(--COLOR-submit-hover);
+    color: #ffffff;
+    opacity: 0.7;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-pagination {
+    margin-top: 40px;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-pagination li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr td .btn-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr td .btn-wrapper>button {
+    border: none;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr td .btn-wrapper>button:first-child svg {
+    color: rgb(51, 51, 227);
+    margin-right: 15px;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr td .btn-wrapper>button:first-child svg:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr td .btn-wrapper>button:last-child svg {
+    color: rgb(232, 40, 40);
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr td .btn-wrapper>button:last-child svg:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.ServiceReport .ant-table-wrapper .ant-spin-container .ant-table-body table tbody tr:hover td .btn-wrapper button {
+    background-color: #fafafa;
+}
+
+.ServiceReport .ant-table-wrapper .ant-table-filter-column>span:last-child {
+    margin-right: 15px;
+}

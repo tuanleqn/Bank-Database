@@ -10,6 +10,16 @@ class AdminController {
         }
     };
 
+
+    getServiceReport = async (req, res) => {
+        try {
+            let result = await AdminService.getServiceReport();
+            return res.status(200).json({ data: result });
+        } catch (err) {
+            return res.status(500).json({ message: "Server error: " + err.message });
+        }
+    }
+
     getCustomerByName = async (req, res) => {
         try {
             if (!req.session.user) {
@@ -24,6 +34,7 @@ class AdminController {
             res.status(500).json({ error: error.message });
         }
     };
+
 }
 
 
