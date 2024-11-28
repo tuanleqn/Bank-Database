@@ -10,5 +10,6 @@ router.post('/total-serve', AdminController.getTotalServe);
 
 router.get('/customer_by_name', AdminController.getCustomerByName);
 
+router.get('/all_customers', AdminController.getAllCustomers);
 
 module.exports = router

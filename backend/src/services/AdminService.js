@@ -3,10 +3,11 @@ const db = require("../config/db");
 class AdminService {
     getInforUser = async (req, res) => {
         try {
-            const user = "getInforUser success";
+
+            const user = 'getInforUser success';
             return user;
         } catch (error) {
-            throw new Error("Error fetching user by ID: " + error.message);
+            throw new Error('Error fetching user by ID: ' + error.message);
         }
     };
 
@@ -52,6 +53,7 @@ class AdminService {
             throw new Error(error.message);
         }
     };
+
 
     getInforUser = async (req, res) => {
         try {
@@ -137,6 +139,76 @@ class AdminService {
         }
     };
 
+    getAllCustomers = async () => {
+        try {
+            const [customers] = await db.query('SELECT * FROM Customer');
+            const customerIds = customers.map((cust) => cust.customerCode);
+
+            const [accounts] = await db.query(
+                'SELECT * FROM Account WHERE customerCode IN (?)',
+                [customerIds]
+            );
+
+            const [phoneNumbers] = await db.query(
+                'SELECT * FROM CustomerPhoneNumber WHERE customerCode IN (?)',
+                [customerIds]
+            );
+
+            const accountNumbers = accounts.map((acc) => acc.accountNumber);
+            const [savingsAccounts] = await db.query(
+                'SELECT * FROM SavingsAccount WHERE accountNumber IN (?)',
+                [accountNumbers]
+            );
+            const [checkingAccounts] = await db.query(
+                'SELECT * FROM CheckingAccount WHERE accountNumber IN (?)',
+                [accountNumbers]
+            );
+            const [loanAccounts] = await db.query(
+                'SELECT * FROM LoanAccount WHERE accountNumber IN (?)',
+                [accountNumbers]
+            );
+
+            const customersData = customers.map((customer) => ({
+                ...customer,
+                phoneNumbers: phoneNumbers
+                    .filter(
+                        (phone) => phone.customerCode === customer.customerCode
+                    )
+                    .map((phone) => phone.phoneNumber),
+                accounts: accounts
+                    .filter(
+                        (account) =>
+                            account.customerCode === customer.customerCode
+                    )
+                    .map((account) => ({
+                        ...account,
+                        details:
+                            account.accountType === 'Savings'
+                                ? savingsAccounts.find(
+                                      (sa) =>
+                                          sa.accountNumber ===
+                                          account.accountNumber
+                                  )
+                                : account.accountType === 'Checking'
+                                ? checkingAccounts.find(
+                                      (ca) =>
+                                          ca.accountNumber ===
+                                          account.accountNumber
+                                  )
+                                : loanAccounts.find(
+                                      (la) =>
+                                          la.accountNumber ===
+                                          account.accountNumber
+                                  ),
+                    })),
+            }));
+
+            return customersData;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    };
 }
 
 module.exports = new AdminService();
