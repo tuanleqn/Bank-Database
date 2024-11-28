@@ -189,7 +189,7 @@ CREATE TABLE CheckingAccount (
 -- LOAN ACCOUNT
 CREATE TABLE LoanAccount (
     accountNumber CHAR(36) PRIMARY KEY,
-    dateOfTaken DATE NOT NULL DEFAULT CURRENT_DATE,
+    dateOfTaken DATE NOT NULL,
     dueBalance DECIMAL(15, 2) NOT NULL, 
     interestRate DECIMAL(5, 2) NOT NULL,
     FOREIGN KEY (accountNumber) REFERENCES Account(accountNumber)
@@ -200,6 +200,10 @@ CREATE TRIGGER CHK_account_loan_taken_date
 BEFORE INSERT ON LoanAccount
 FOR EACH ROW
 BEGIN
+	IF NEW.dateOfTaken IS NULL THEN
+        SET NEW.dateOfTaken = CURRENT_DATE();
+    END IF;
+
     IF NEW.dateOfTaken > CURRENT_DATE() THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Ngày nhận khoản vay không thể lớn hơn ngày hiện tại.';

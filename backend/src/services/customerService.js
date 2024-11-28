@@ -2,17 +2,20 @@ const db = require('../config/db.js');
 
 const getAllCustomersAndAccounts = async () => {
     try {
-        // Lấy dữ liệu khách hàng
+
         const [customers] = await db.query('SELECT * FROM customer');
 
-        // Lấy dữ liệu tài khoản cho các khách hàng
         const customerIds = customers.map(cust => cust.customerCode);
         const [accounts] = await db.query('SELECT * FROM account WHERE customerCode IN (?)', [customerIds]);
 
-        // Kết hợp dữ liệu khách hàng với tài khoản
+        const [phoneNumbers] = await db.query('SELECT * FROM CustomerPhoneNumber WHERE customerCode IN (?)', [customerIds]);
+
         const customersData = customers.map(customer => ({
             ...customer,
-            accounts: accounts.filter(account => account.customerCode === customer.customerCode)
+            accounts: accounts.filter(account => account.customerCode === customer.customerCode),
+            phoneNumbers: phoneNumbers
+                .filter(phone => phone.customerCode === customer.customerCode)
+                .map(phone => phone.phoneNumber) // Lấy danh sách số điện thoại
         }));
 
         return customersData;
@@ -20,6 +23,5 @@ const getAllCustomersAndAccounts = async () => {
         throw err;
     }
 };
-
 
 module.exports = { getAllCustomersAndAccounts };

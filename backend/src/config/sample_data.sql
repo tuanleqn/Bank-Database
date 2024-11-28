@@ -150,6 +150,7 @@ VALUES
     ('E004', 'CS034', '2024-10-31'),
     ('E005', 'CS035', '2024-10-31');
 
+
 -- Account
 INSERT INTO Account (
 	accountNumber,  
@@ -181,6 +182,18 @@ VALUES
         'CS005',
         'Checking',
 		'2022-05-22'
+    ),
+     (
+		'AC005',
+        'CS006',
+        'Checking',
+		'2022-05-22'
+    ),
+     (
+		'AC006',
+        'CS006',
+        'Savings',
+		'2022-05-22'
     );
 INSERT INTO CheckingAccount
 	(
@@ -195,6 +208,10 @@ VALUE
     (
 		'AC004',
         10115000
+    ),
+    (
+		'AC005',
+        10153000
     );
 INSERT INTO SavingsAccount
 	(
@@ -207,6 +224,11 @@ VALUE
 		'AC002',
         0.06,
         236765000	
+    ),
+    (
+		'AC006',
+        0.07,
+        10115000
     );
     
 INSERT INTO LoanAccount
@@ -227,11 +249,13 @@ VALUE
 -- Thêm số điện thoại cho khách hàng vào bảng CustomerPhoneNumber
 INSERT INTO CustomerPhoneNumber (phoneNumber, customerCode)
 VALUES
-    ('0901123456', (SELECT customerCode FROM Customer WHERE firstName = 'Alice')),
-    ('0902123456', (SELECT customerCode FROM Customer WHERE firstName = 'Bob')),
-    ('0903123456', (SELECT customerCode FROM Customer WHERE firstName = 'Charlie')),
-    ('0904123456', (SELECT customerCode FROM Customer WHERE firstName = 'David')),
-    ('0905123456', (SELECT customerCode FROM Customer WHERE firstName = 'Eve'));
+    ('0901123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS001')),
+    ('0902123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS002')),
+    ('0903123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS003')),
+    ('0904123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS004')),
+    ('0905123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS005')),
+	('0905123123', (SELECT customerCode FROM Customer WHERE customerCode = 'CS006'));
+
 
 
 
