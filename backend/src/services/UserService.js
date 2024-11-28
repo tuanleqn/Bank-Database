@@ -19,7 +19,7 @@ class UserService {
     }
   };
 
-  addAccount = async (customerCode, accountType, additionalData) => {    
+  addAccount = async (customerCode, accountType, additionalData) => {
     try {
       let accountNumber = '';
       const queryGetAccountNumber = `SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`;
@@ -27,7 +27,7 @@ class UserService {
       if (rows.length === 0) {
         const queryAddAccount = `INSERT INTO Account (customerCode, accountType) VALUES (?, ?)`;
         await db.query(queryAddAccount, [customerCode, accountType]);
-        const [newAccountNumberRow] = await db.query(`SELECT LAST_INSERT_ID() AS accountNumber`);
+        const [newAccountNumberRow] = await db.query(`SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`, [customerCode, accountType]);
         accountNumber = newAccountNumberRow[0].accountNumber;
       } else {
         accountNumber = rows[0].accountNumber;
