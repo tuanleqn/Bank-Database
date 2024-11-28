@@ -33,12 +33,12 @@ function ManageUsers() {
             dataIndex: 'accountNumber',
         },
         {
-            title: <span style={{ fontWeight: '600' }}>Số dư</span>,
-            dataIndex: 'id',
+            title: 'Account Balance',
+            render: (_, record) => record.details?.dueBalance || record.details?.accountBalance || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Lãi suất</span>,
-            dataIndex: 'id',
+            render: (_, record) => record.details?.interestRate || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Ngày mở / Ngày vay</span>,
@@ -79,6 +79,24 @@ function ManageUsers() {
             customerCode = customerActive.customerCode;
         }
 
+        if (typeAccount === 'Checking') {
+            accountBalance = document.querySelector('#accountBalance').value;
+            data = {
+                accountBalance,
+            };
+            customerCode = customerActive.customerCode;
+        }
+
+        if (typeAccount === 'Loan') {
+            dueBalance = document.querySelector('#dueBalance').value;
+            interestRate = document.querySelector('#interestRate').value;
+            data = {
+                dueBalance,
+                interestRate,
+            };
+            customerCode = customerActive.customerCode;
+        }
+
         axios
             .post(`${apiAddAccount}`, {
                 customerCode,
@@ -86,27 +104,29 @@ function ManageUsers() {
                 additionalData: data,
             })
             .then((response) => {
-                alert(response.data.message);
                 resetInput();
+                alert(response.data.message);
             })
             .catch((error) => {
+                console.log(error.response.data.message);                
                 alert(error.response.data.message);
             });
     };
 
     useEffect(() => {
-        const apiCustomer = 'http://localhost:3001/customer/all_customer';
+        const apiCustomer = 'http://localhost:3001/admin/all_customers';
         axios
-            .get(`${apiCustomer}`,{
+            .get(`${apiCustomer}`, {
                 withCredentials: true,
             })
             .then((response) => {
                 setDataUsers(response.data);
-                const accounts = response.data.map((customer) => customer.accounts);
-                setDataAccouts(accounts.flat());
             })
             .catch((error) => {
-                console.error(error);
+                if (error.response.status === 401) {
+                    window.location.href = 'http://localhost:3000/auth/login';
+                }
+                console.log(error.response.data.message);
             });
     }, []);
 
@@ -120,6 +140,7 @@ function ManageUsers() {
                 dataUsers.forEach((customer) => {
                     if (customer.customerCode === customerCode) {
                         setCustomerActive(customer);
+                        setDataAccouts(customer.accounts);
                     }
                 });
             });
@@ -135,6 +156,7 @@ function ManageUsers() {
         }
     }, []);
 
+
     return (
         <div className="flex  gap-12 ">
             {/* left */}
@@ -146,7 +168,7 @@ function ManageUsers() {
                     <input type="text" placeholder="Search" className="ml-4 w-fit flex-grow outline-none" />
                 </div>
 
-                <div className="overflow-auto mt-6 h-full">
+                <div className="overflow-auto mt-6 h-[500px]">
                     <Table
                         columns={columnsCustomers}
                         dataSource={dataUsers}
@@ -187,7 +209,7 @@ function ManageUsers() {
                             </p>
                             <p>
                                 Số điện thoại:{' '}
-                                <span className="ml-2 font-normal"> {customerActive?.phoneNumber || '---'}</span>
+                                <span className="ml-2 font-normal"> {customerActive?.phoneNumbers || '---'}</span>
                             </p>
                             <p>
                                 Địa chỉ nhà:{' '}

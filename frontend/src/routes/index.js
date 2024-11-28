@@ -1,4 +1,3 @@
-import ManageEmployee from '../pages/AdminPage/ManageEmployee';
 import ManageUser from '../pages/AdminPage/ManageUser';
 import UserPage from '../pages/UserPage/UserPage';
 import LandingPage from '../pages/LandingPage/LandingPage';
