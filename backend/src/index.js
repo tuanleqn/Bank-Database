@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3001;
 const session = require('express-session');
+const calculateBalanceRouter = require('./routes/CalculateBalanceRouter');
 
 app.use(cors({
   origin: "http://localhost:3000",
