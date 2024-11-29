@@ -94,4 +94,22 @@ const getCustomerAccountsByCode = async (customerCode) => {
     }
 };
 
+const getTotalBalanceByAccountType = async (customerId) => {
+    try {
+        const [balances] = await db.query(`
+            SELECT accountType, SUM(balance) AS totalBalance
+            FROM Account
+            JOIN Transaction ON Account.accountNumber = Transaction.accountNumber
+            WHERE customerCode = ?
+            GROUP BY accountType;
+        `, [customerId]);
+
+        return balances;
+    } catch (err) {
+        throw err;
+    }
+};
+
+
+module.exports = { getTotalBalanceByAccountType };
 module.exports = { getAllCustomersAndAccounts, getCustomerAccountsByCode };
