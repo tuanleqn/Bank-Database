@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function ManageUsers() {
     const [dataUsers, setDataUsers] = useState([]);
@@ -106,15 +106,37 @@ function ManageUsers() {
             .then((response) => {
                 resetInput();
                 toggleAddAccount();
-                alert("Tài khoản đã được thêm thành công");
+                alert('Tài khoản đã được thêm thành công');
             })
             .catch((error) => {
-                console.log(error.response.data.message);                
-                alert("Có lỗi xảy ra khi thêm tài khoản");
+                console.log(error.response.data.message);
+                alert('Có lỗi xảy ra khi thêm tài khoản');
             });
     };
 
-    useEffect(() => {
+    const handleSearch = (event) => {
+        if (event.key !== 'Enter') return;
+
+        if (event.target.value === '') {
+            fetchAllUser();
+            return;
+        }
+
+        const search = document.querySelector('#search').value;
+        const apiSearch = `http://localhost:3001/admin/customer_by_name?name=${search}`;
+        axios
+            .get(`${apiSearch}`, {
+                withCredentials: true,
+            })
+            .then((response) => {
+                setDataUsers(response.data);
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });
+    };
+
+    const fetchAllUser = () => {
         const apiCustomer = 'http://localhost:3001/admin/all_customers';
         axios
             .get(`${apiCustomer}`, {
@@ -129,6 +151,10 @@ function ManageUsers() {
                 }
                 console.log(error.response.data.message);
             });
+    };
+
+    useEffect(() => {
+        fetchAllUser();
     }, []);
 
     useEffect(() => {
@@ -157,7 +183,6 @@ function ManageUsers() {
         }
     }, []);
 
-
     return (
         <div className="flex  gap-12 ">
             {/* left */}
@@ -166,7 +191,13 @@ function ManageUsers() {
 
                 <div className="flex border mt-6 ml-6 w-[300px] items-center rounded-full bg-white px-4 py-2 shadow outline-none">
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search" className="ml-4 w-fit flex-grow outline-none" />
+                    <input
+                        type="text"
+                        id="search"
+                        onKeyDown={handleSearch}
+                        placeholder="Search"
+                        className="ml-4 w-fit flex-grow outline-none"
+                    />
                 </div>
 
                 <div className="overflow-auto mt-6 h-[500px]">
