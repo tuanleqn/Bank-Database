@@ -170,6 +170,24 @@ DELIMITER ;
 ALTER TABLE Account
 ADD CONSTRAINT CHK_unique
 UNIQUE (customerCode, accountType); 
+-- VIEW CACULATE BALANCE
+CREATE VIEW CustomerAccountBalances AS
+SELECT 
+    customerCode,
+    accountType,
+    SUM(accountBalance) AS totalBalance
+FROM 
+    Account
+LEFT JOIN 
+    SavingsAccount ON Account.accountNumber = SavingsAccount.accountNumber
+LEFT JOIN 
+    CheckingAccount ON Account.accountNumber = CheckingAccount.accountNumber
+LEFT JOIN 
+    LoanAccount ON Account.accountNumber = LoanAccount.accountNumber
+GROUP BY 
+    customerCode, accountType;
+
+
 
 -- SAVINGS ACCOUNT
 CREATE TABLE SavingsAccount (
@@ -178,6 +196,25 @@ CREATE TABLE SavingsAccount (
     accountBalance DECIMAL(15, 2) NOT NULL CHECK (accountBalance >= 0), 
     FOREIGN KEY (accountNumber) REFERENCES Account(accountNumber) 
 );
+
+DELIMITER //
+
+CREATE TRIGGER SetInterestRateForSavingsAccount
+BEFORE INSERT ON SavingsAccount
+FOR EACH ROW
+BEGIN
+    IF NEW.accountNumber IN (
+        SELECT accountNumber 
+        FROM Account 
+        WHERE openDate >= '2020-09-01'
+    ) THEN
+        SET NEW.interestRate = 10.00;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
 
 -- CHECKING ACCOUNT
 CREATE TABLE CheckingAccount (
