@@ -182,6 +182,7 @@ function ManageUsers() {
         listCus.forEach((item) => {
             item.addEventListener('click', () => {
                 customerCode = item.children[0].innerText;
+                setDataAccouts([])
                 
                 const apiCustomerInfo = `http://localhost:3001/admin/basic_customer_info?customerCode=${customerCode}`;
                 axios
