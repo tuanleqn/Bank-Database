@@ -46,7 +46,7 @@ class AdminController {
                     .json({ message: 'Chưa xác thực thông tin người dùng' });
             }
             const { name } = req.query;
-            const customersData = await AdminService.getCustomerByName(name);
+            const customersData = await AdminService.getCustomerByNameOrId(name);
             res.json(customersData);
         } catch (error) {
             res.status(500).json({ error: error.message });

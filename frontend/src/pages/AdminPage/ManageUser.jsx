@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function ManageUsers() {
     const [dataUsers, setDataUsers] = useState([]);
@@ -33,16 +33,17 @@ function ManageUsers() {
             dataIndex: 'accountNumber',
         },
         {
-            title: <span style={{ fontWeight: '600' }}>Số dư</span>,
-            dataIndex: 'id',
+            title: 'Số dư',
+            render: (_, record) => record.savingDetails?.accountBalance || record.checkingDetails?.accountBalance || record.loanDetails?.dueBalance || record.details?.accountBalance || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Lãi suất</span>,
-            dataIndex: 'id',
+            render: (_, record) => record.savingDetails?.interestRate ||record.loanDetails?.interestRate || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Ngày mở / Ngày vay</span>,
-            dataIndex: 'openDate',
+            render: (_, record) =>  record.loanDetails?.dateOfTaken || record?.openDate || 'N/A',
+            
         },
     ];
 
@@ -79,6 +80,24 @@ function ManageUsers() {
             customerCode = customerActive.customerCode;
         }
 
+        if (typeAccount === 'Checking') {
+            accountBalance = document.querySelector('#accountBalance').value;
+            data = {
+                accountBalance,
+            };
+            customerCode = customerActive.customerCode;
+        }
+
+        if (typeAccount === 'Loan') {
+            dueBalance = document.querySelector('#dueBalance').value;
+            interestRate = document.querySelector('#interestRate').value;
+            data = {
+                dueBalance,
+                interestRate,
+            };
+            customerCode = customerActive.customerCode;
+        }
+
         axios
             .post(`${apiAddAccount}`, {
                 customerCode,
@@ -86,28 +105,74 @@ function ManageUsers() {
                 additionalData: data,
             })
             .then((response) => {
-                alert(response.data.message);
                 resetInput();
+                toggleAddAccount();
+                alert('Tài khoản đã được thêm thành công');
             })
             .catch((error) => {
-                alert(error.response.data.message);
+                console.log(error.response.data.message);
+                alert('Có lỗi xảy ra khi thêm tài khoản');
             });
     };
 
-    useEffect(() => {
-        const apiCustomer = 'http://localhost:3001/customer/all_customer';
+    const handleSearch = (event) => {
+        if (event.key !== 'Enter') return;
+
+        if (event.target.value === '') {
+            fetchAllUser();
+            return;
+        }
+
+        const search = document.querySelector('#search').value;
+        const apiSearch = `http://localhost:3001/admin/customer_by_name?name=${search}`;
         axios
-            .get(`${apiCustomer}`,{
+            .get(`${apiSearch}`, {
                 withCredentials: true,
             })
             .then((response) => {
                 setDataUsers(response.data);
-                const accounts = response.data.map((customer) => customer.accounts);
-                setDataAccouts(accounts.flat());
             })
             .catch((error) => {
-                console.error(error);
+                console.log(error.response.data.message);
             });
+    };
+
+    const fetchAccounts = (customerCode) => {
+        
+        const apiCustomerAccounts = `http://localhost:3001/admin/customer_accounts?customerCode=${customerCode}`;
+        axios
+            .get(`${apiCustomerAccounts}`, {
+                withCredentials: true,
+            })
+            .then((response) => {
+                setDataAccouts(response.data.accounts);
+                console.log(response.data.accounts);
+                
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });            
+    };
+
+    const fetchAllUser = () => {
+        const apiCustomer = 'http://localhost:3001/admin/all_customers';
+        axios
+            .get(`${apiCustomer}`, {
+                withCredentials: true,
+            })
+            .then((response) => {
+                setDataUsers(response.data);
+            })
+            .catch((error) => {
+                if (error.response.status === 401) {
+                    window.location.href = 'http://localhost:3000/auth/login';
+                }
+                console.log(error.response.data.message);
+            });
+    };
+
+    useEffect(() => {
+        fetchAllUser();
     }, []);
 
     useEffect(() => {
@@ -117,11 +182,18 @@ function ManageUsers() {
         listCus.forEach((item) => {
             item.addEventListener('click', () => {
                 customerCode = item.children[0].innerText;
-                dataUsers.forEach((customer) => {
-                    if (customer.customerCode === customerCode) {
-                        setCustomerActive(customer);
-                    }
-                });
+                
+                const apiCustomerInfo = `http://localhost:3001/admin/basic_customer_info?customerCode=${customerCode}`;
+                axios
+                    .get(`${apiCustomerInfo}`, {
+                        withCredentials: true,
+                    })
+                    .then((response) => {
+                        setCustomerActive(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data.message);
+                    });
             });
         });
     }, [dataUsers]);
@@ -133,7 +205,7 @@ function ManageUsers() {
                 setTypeAccount(type.value);
             });
         }
-    }, []);
+    }, []);    
 
     return (
         <div className="flex  gap-12 ">
@@ -143,10 +215,16 @@ function ManageUsers() {
 
                 <div className="flex border mt-6 ml-6 w-[300px] items-center rounded-full bg-white px-4 py-2 shadow outline-none">
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search" className="ml-4 w-fit flex-grow outline-none" />
+                    <input
+                        type="text"
+                        id="search"
+                        onKeyDown={handleSearch}
+                        placeholder="Search"
+                        className="ml-4 w-fit flex-grow outline-none"
+                    />
                 </div>
 
-                <div className="overflow-auto mt-6 h-full">
+                <div className="overflow-auto mt-6 h-[500px]">
                     <Table
                         columns={columnsCustomers}
                         dataSource={dataUsers}
@@ -198,6 +276,14 @@ function ManageUsers() {
                                 <span className="ml-2 font-normal"> {customerActive?.officeAddress || '---'}</span>
                             </p>
                         </div>
+                        {customerActive && (
+                            <button          
+                                onClick={() => fetchAccounts(customerActive.customerCode)}                      
+                                className="text-white h-fit mt-auto ml-auto bg-primary rounded-lg  mr-4 px-6 py-2 shadow-inner hover:shadow-white"
+                            >
+                                Xem thêm
+                            </button>
+                        )}
                     </div>
                 </div>
 
