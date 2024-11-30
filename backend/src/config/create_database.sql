@@ -166,11 +166,6 @@ END;
 //
 DELIMITER ;
 
--- CONSTRAINT UNIQUE ACCOUNT TYPE 
-ALTER TABLE Account
-ADD CONSTRAINT CHK_unique
-UNIQUE (customerCode, accountType); 
-
 -- SAVINGS ACCOUNT
 CREATE TABLE SavingsAccount (
     accountNumber CHAR(36) PRIMARY KEY,
