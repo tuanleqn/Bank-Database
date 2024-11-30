@@ -87,7 +87,7 @@ function Login() {
                 toast.success('Đăng nhập thành công!');
                 setTimeout(() => {
                     data.role === 'admin' ? navigate('/admin/manage-users') : navigate('/user');
-                }, 1500);
+                }, 1000);
             } else {
                 toast.error(data.message);
             }
@@ -151,12 +151,12 @@ function Login() {
                         Đăng nhập
                     </button>
                 </form>
-                <div className="text-center mt-20">
+                {/* <div className="text-center mt-20">
                     Bạn chưa có tài khoản?
                     <Link to="/auth/register" className="text-primary font-semibold hover:underline ml-2">
                         Đăng ký ngay
                     </Link>
-                </div>
+                </div> */}
             </div>
             {/* column right */}
             <div className="hidden sm:flex flex-col flex-1 bg-[#D2ECF4] rounded-xl h-[90vh] items-center justify-center gap-6 pt-4">

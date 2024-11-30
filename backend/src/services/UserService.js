@@ -3,18 +3,82 @@ const db = require("../config/db");
 class UserService {
   getCustomerByEmail = async (email) => {
     try {
-      const [rows] = await db.query(`SELECT * FROM Customer WHERE email = ?`, [
-        email,
-      ]);
+      const [customerAccounts] = await db.query(
+        `
+            SELECT 
+                c.firstName,
+                c.lastName,
+                c.customerCode,
+                c.email,
+                c.homeAddress,
+                c.officeAddress,
+                a.accountNumber,
+                a.accountType,
+                a.openDate,
+                la.dateOfTaken AS loanDateOfTaken,
+                la.dueBalance AS loanDueBalance,
+                la.interestRate AS loanInterestRate,
+                sa.interestRate AS savingInterestRate,
+                sa.accountBalance AS savingAccountBalance,
+                ca.accountBalance AS checkingAccountBalance
+            FROM 
+                Customer c
+            LEFT JOIN 
+                Account a ON c.customerCode = a.customerCode
+            LEFT JOIN 
+                LoanAccount la ON a.accountNumber = la.accountNumber
+            LEFT JOIN 
+                SavingsAccount sa ON a.accountNumber = sa.accountNumber
+            LEFT JOIN 
+                CheckingAccount ca ON a.accountNumber = ca.accountNumber
+            WHERE 
+                c.email = ?;
+        `,
+        [email]
+      );
 
-      if (rows.length === 0) {
-        return { message: "Không tìm thấy khách hàng với email này." };
-      }
+      const result = customerAccounts.reduce((acc, curr) => {
+        const customerKey = curr.customerCode;
 
-      return rows[0];
-    } catch (error) {
-      console.error("Lỗi khi truy vấn dữ liệu khách hàng:", error);
-      throw new Error("Lỗi khi truy vấn dữ liệu khách hàng.");
+        if (!acc[customerKey]) {
+          acc[customerKey] = {
+            firstName: curr.firstName,
+            lastName: curr.lastName,
+            customerCode: curr.customerCode,
+            email: curr.email,
+            homeAddress: curr.homeAddress,
+            officeAddress: curr.officeAddress,
+            accounts: [],
+          };
+        }
+
+        acc[customerKey].accounts.push({
+          accountNumber: curr.accountNumber,
+          accountType: curr.accountType,
+          openDate: curr.openDate,
+          loanDetails: curr.loanDateOfTaken
+            ? {
+                dateOfTaken: curr.loanDateOfTaken,
+                dueBalance: curr.loanDueBalance,
+                interestRate: curr.loanInterestRate,
+              }
+            : null,
+          savingDetails: curr.savingInterestRate
+            ? {
+                interestRate: curr.savingInterestRate,
+                accountBalance: curr.savingAccountBalance,
+              }
+            : null,
+          checkingDetails: curr.checkingAccountBalance
+            ? { accountBalance: curr.checkingAccountBalance }
+            : null,
+        });
+
+        return acc;
+      }, {});
+      return Object.values(result);
+    } catch (err) {
+      throw err;
     }
   };
 
@@ -29,7 +93,10 @@ class UserService {
       if (rows.length === 0) {
         const queryAddAccount = `INSERT INTO Account (customerCode, accountType) VALUES (?, ?)`;
         await db.query(queryAddAccount, [customerCode, accountType]);
-        const [newAccountNumberRow] = await db.query(`SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`, [customerCode, accountType]);
+        const [newAccountNumberRow] = await db.query(
+          `SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`,
+          [customerCode, accountType]
+        );
         accountNumber = newAccountNumberRow[0].accountNumber;
       } else {
         accountNumber = rows[0].accountNumber;

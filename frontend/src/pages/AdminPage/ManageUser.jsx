@@ -33,7 +33,7 @@ function ManageUsers() {
             dataIndex: 'accountNumber',
         },
         {
-            title: 'Account Balance',
+            title: 'Số dư',
             render: (_, record) => record.details?.dueBalance || record.details?.accountBalance || 'N/A',
         },
         {
@@ -181,7 +181,7 @@ function ManageUsers() {
                 setTypeAccount(type.value);
             });
         }
-    }, []);
+    }, []);    
 
     return (
         <div className="flex  gap-12 ">
@@ -252,6 +252,13 @@ function ManageUsers() {
                                 <span className="ml-2 font-normal"> {customerActive?.officeAddress || '---'}</span>
                             </p>
                         </div>
+                        {customerActive && (
+                            <button                                
+                                className="text-white h-fit mt-auto ml-auto bg-primary rounded-lg  mr-4 px-6 py-2 shadow-inner hover:shadow-white"
+                            >
+                                Xem tài khoản
+                            </button>
+                        )}
                     </div>
                 </div>
 
