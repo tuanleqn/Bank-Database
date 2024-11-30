@@ -66,6 +66,40 @@ class AdminController {
             res.status(500).json({ error: error.message });
         }
     };
+
+    getBasicCustomerInfo = async (req, res) => {
+        try {
+            if (!req.session.user) {
+                return res
+                    .status(401)
+                    .json({ message: 'Chưa xác thực thông tin người dùng' });
+            }
+            const customerCode = req.query.customerCode;
+            const customerData = await AdminService.getBasicCustomerInfo(
+                customerCode
+            );
+            res.json(customerData);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    };
+
+    getCustomerAccounts = async (req, res) => {
+        try {
+            if (!req.session.user) {
+                return res
+                    .status(401)
+                    .json({ message: 'Chưa xác thực thông tin người dùng' });
+            }
+            const customerCode = req.query.customerCode;
+            const customerData = await AdminService.getCustomerAccountsByCode(
+                customerCode
+            );
+            res.json(customerData);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    };
 }
 
 

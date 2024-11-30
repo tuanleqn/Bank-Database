@@ -12,4 +12,8 @@ router.get('/customer_by_name', AdminController.getCustomerByName);
 
 router.get('/all_customers', AdminController.getAllCustomers);
 
+router.get('/basic_customer_info', AdminController.getBasicCustomerInfo);
+
+router.get('/customer_accounts', AdminController.getCustomerAccounts);
+
 module.exports = router
