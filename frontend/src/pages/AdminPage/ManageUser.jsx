@@ -34,15 +34,16 @@ function ManageUsers() {
         },
         {
             title: 'Số dư',
-            render: (_, record) => record.details?.dueBalance || record.details?.accountBalance || 'N/A',
+            render: (_, record) => record.savingDetails?.accountBalance || record.checkingDetails?.accountBalance || record.loanDetails?.dueBalance || record.details?.accountBalance || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Lãi suất</span>,
-            render: (_, record) => record.details?.interestRate || 'N/A',
+            render: (_, record) => record.savingDetails?.interestRate ||record.loanDetails?.interestRate || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Ngày mở / Ngày vay</span>,
-            dataIndex: 'openDate',
+            render: (_, record) =>  record.loanDetails?.dateOfTaken || record?.openDate || 'N/A',
+            
         },
     ];
 
@@ -136,6 +137,23 @@ function ManageUsers() {
             });
     };
 
+    const fetchAccounts = (customerCode) => {
+        
+        const apiCustomerAccounts = `http://localhost:3001/admin/customer_accounts?customerCode=${customerCode}`;
+        axios
+            .get(`${apiCustomerAccounts}`, {
+                withCredentials: true,
+            })
+            .then((response) => {
+                setDataAccouts(response.data.accounts);
+                console.log(response.data.accounts);
+                
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });            
+    };
+
     const fetchAllUser = () => {
         const apiCustomer = 'http://localhost:3001/admin/all_customers';
         axios
@@ -164,12 +182,18 @@ function ManageUsers() {
         listCus.forEach((item) => {
             item.addEventListener('click', () => {
                 customerCode = item.children[0].innerText;
-                dataUsers.forEach((customer) => {
-                    if (customer.customerCode === customerCode) {
-                        setCustomerActive(customer);
-                        setDataAccouts(customer.accounts);
-                    }
-                });
+                
+                const apiCustomerInfo = `http://localhost:3001/admin/basic_customer_info?customerCode=${customerCode}`;
+                axios
+                    .get(`${apiCustomerInfo}`, {
+                        withCredentials: true,
+                    })
+                    .then((response) => {
+                        setCustomerActive(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data.message);
+                    });
             });
         });
     }, [dataUsers]);
@@ -241,7 +265,7 @@ function ManageUsers() {
                             </p>
                             <p>
                                 Số điện thoại:{' '}
-                                <span className="ml-2 font-normal"> {customerActive?.phoneNumbers || '---'}</span>
+                                <span className="ml-2 font-normal"> {customerActive?.phoneNumber || '---'}</span>
                             </p>
                             <p>
                                 Địa chỉ nhà:{' '}
@@ -253,10 +277,11 @@ function ManageUsers() {
                             </p>
                         </div>
                         {customerActive && (
-                            <button                                
+                            <button          
+                                onClick={() => fetchAccounts(customerActive.customerCode)}                      
                                 className="text-white h-fit mt-auto ml-auto bg-primary rounded-lg  mr-4 px-6 py-2 shadow-inner hover:shadow-white"
                             >
-                                Xem tài khoản
+                                Xem thêm
                             </button>
                         )}
                     </div>
