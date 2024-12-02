@@ -166,6 +166,7 @@ END;
 //
 DELIMITER ;
 
+
 -- SAVINGS ACCOUNT
 CREATE TABLE SavingsAccount (
     accountNumber CHAR(36) PRIMARY KEY,
@@ -173,6 +174,25 @@ CREATE TABLE SavingsAccount (
     accountBalance DECIMAL(15, 2) NOT NULL CHECK (accountBalance >= 0), 
     FOREIGN KEY (accountNumber) REFERENCES Account(accountNumber) 
 );
+
+-- DELIMITER //
+
+-- CREATE TRIGGER SetInterestRateForSavingsAccount
+-- BEFORE INSERT ON SavingsAccount
+-- FOR EACH ROW
+-- BEGIN
+--     IF NEW.accountNumber IN (
+--         SELECT accountNumber 
+--         FROM Account 
+--         WHERE openDate >= '2020-09-01'
+--     ) THEN
+--         SET NEW.interestRate = 10.00;
+--     END IF;
+-- END;
+-- //
+
+-- DELIMITER ;
+
 
 -- CHECKING ACCOUNT
 CREATE TABLE CheckingAccount (

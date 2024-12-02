@@ -1,34 +1,53 @@
 import { Table } from 'antd';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function UserPage() {
-    
-    const dataAccouts = Array.from({ length: 10 }, (_, index) => ({
-        type: 'Tài khoản vay',
-        id: `22100${index + 1}`,
-    }));
+    const [userData, setUserData] = useState([]);
+    const [dataAccouts, setDataAccouts] = useState([]);    
 
     const columnsAccounts = [
         {
             title: <span style={{ fontWeight: '600' }}>Loại tài khoản</span>,
-            dataIndex: 'type',
+            dataIndex: 'accountType',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Mã số</span>,
-            dataIndex: 'id',
+            dataIndex: 'accountNumber',
         },
         {
-            title: <span style={{ fontWeight: '600' }}>Số dư</span>,
-            dataIndex: 'id',
+            title: 'Số dư',
+            render: (_, record) => record.savingDetails?.accountBalance || record.checkingDetails?.accountBalance || record.loanDetails?.dueBalance || record.details?.accountBalance || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Lãi suất</span>,
-            dataIndex: 'id',
+            render: (_, record) => record.savingDetails?.interestRate ||record.loanDetails?.interestRate || 'N/A',
         },
         {
             title: <span style={{ fontWeight: '600' }}>Ngày mở / Ngày vay</span>,
-            dataIndex: 'id',
+            render: (_, record) =>  record.loanDetails?.dateOfTaken || record?.openDate || 'N/A',
+            
         },
     ];
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:3001/user/profile', {
+                withCredentials: true,
+            })
+            .then((res) => {
+                setUserData(res.data[0]);
+                setDataAccouts(res.data[0].accounts);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    console.log(userData);
+    console.log(dataAccouts);
+    
+
 
     return (
         <div className=" mx-auto flex justify-between gap-12">
@@ -45,27 +64,25 @@ function UserPage() {
 
                     <div className="left space-y-2 ml-24 pr-6 font-semibold">
                         <p>
-                            ID: <span className="ml-2 font-normal"> 07538772427</span>
+                            ID: <span className="ml-2 font-normal">{userData?.customerCode || '---'}</span>
                         </p>
                         <p>
                             Họ và tên:
-                            <span className="ml-2 font-normal"> Nguyễn Văn A</span>
+                            <span className="ml-2 font-normal">
+                                {userData?.lastName + ' ' + userData?.firstName || '---'}
+                            </span>
                         </p>
                         <p>
-                            Email: <span className="ml-2 font-normal"> abc@hcmut.edu.vn</span>
+                            Email: <span className="ml-2 font-normal">{userData?.email || '---'}</span>
                         </p>
-                        <p className="flex gap-4 ">
-                            <span>Số điện thoại: </span>
-                            <div className='flex flex-col'>
-                                <span className="ml-2 font-normal"> 19006791</span>
-                                <span className="ml-2 font-normal"> 19006791</span>
-                            </div>
+                        
+                        <p>
+                            Địa chỉ nhà:{' '}
+                            <span className="ml-2 font-normal">{userData?.homeAddress || '---'}</span>
                         </p>
                         <p>
-                            Địa chỉ nhà: <span className="ml-2 font-normal">KTX khu A, Đông Hòa, Dĩ An, Bình Dương</span>
-                        </p>
-                        <p>
-                            Địa chỉ công ty: <span className="ml-2 font-normal">KTX khu A, Đông Hòa, Dĩ An, Bình Dương</span>
+                            Địa chỉ công ty:{' '}
+                            <span className="ml-2 font-normal">{userData?.officeAddress || '---'}</span>
                         </p>
                     </div>
                 </div>
