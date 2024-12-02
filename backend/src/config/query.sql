@@ -1,8 +1,13 @@
 -- 2a. UPDATE
+SET SQL_SAFE_UPDATES = 0;
+
 UPDATE SavingsAccount as s
 JOIN Account as a ON s.accountNumber = a.accountNumber 
-SET interestRate = 10
+SET interestRate = s.interestRate * 0.9
 WHERE a.openDate >= '2020-09-01';
+
+SET SQL_SAFE_UPDATES = 0;
+
 
 -- 2c. FUNCTION
 DELIMITER $$

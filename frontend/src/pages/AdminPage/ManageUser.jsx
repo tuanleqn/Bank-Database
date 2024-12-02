@@ -277,15 +277,16 @@ function ManageUsers() {
                                 <span className="ml-2 font-normal"> {customerActive?.officeAddress || '---'}</span>
                             </p>
                         </div>
-                        {customerActive && (
+                        
+                    </div>
+                    {customerActive && (
                             <button          
                                 onClick={() => fetchAccounts(customerActive.customerCode)}                      
-                                className="text-white h-fit mt-auto ml-auto bg-primary rounded-lg  mr-4 px-6 py-2 shadow-inner hover:shadow-white"
+                                className="text-white float-right h-fit w-fit mt-auto mb-4 ml-auto bg-primary rounded-lg  mr-4 px-6 py-2 shadow-inner hover:shadow-white"
                             >
                                 Xem thêm
                             </button>
                         )}
-                    </div>
                 </div>
 
                 {/* bottom */}
