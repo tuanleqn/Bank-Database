@@ -166,28 +166,6 @@ END;
 //
 DELIMITER ;
 
--- -- CONSTRAINT UNIQUE ACCOUNT TYPE 
--- ALTER TABLE Account
--- ADD CONSTRAINT CHK_unique
--- UNIQUE (customerCode, accountType); 
--- -- VIEW CACULATE BALANCE
--- CREATE VIEW CustomerAccountBalances AS
--- SELECT 
---     customerCode,
---     accountType,
---     SUM(accountBalance) AS totalBalance
--- FROM 
---     Account
--- LEFT JOIN 
---     SavingsAccount ON Account.accountNumber = SavingsAccount.accountNumber
--- LEFT JOIN 
---     CheckingAccount ON Account.accountNumber = CheckingAccount.accountNumber
--- LEFT JOIN 
---     LoanAccount ON Account.accountNumber = LoanAccount.accountNumber
--- GROUP BY 
---     customerCode, accountType;
-
-
 
 -- SAVINGS ACCOUNT
 CREATE TABLE SavingsAccount (
