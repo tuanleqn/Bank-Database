@@ -292,29 +292,125 @@ INSERT INTO
         openDate
     )
 VALUES
-    ('AC001', 'CS003', 'Checking', '2016-07-18'),
-    ('AC002', 'CS004', 'Savings', '2020-03-02'),
-    ('AC003', 'CS001', 'Loan', '2021-01-31'),
-    ('AC004', 'CS005', 'Checking', '2022-05-22'),
-    ('AC005', 'CS006', 'Checking', '2022-05-22'),
-    ('AC006', 'CS006', 'Savings', '2022-05-22');
-
-INSERT INTO
-    CheckingAccount (accountNumber, accountBalance) VALUE ('AC001', 23765000),
-    ('AC004', 10115000),
-    ('AC005', 10153000);
-
-INSERT INTO
-    SavingsAccount (accountNumber, interestRate, accountBalance) VALUE ('AC002', 0.06, 236765000),
-    ('AC006', 0.07, 10115000);
-
-INSERT INTO
-    LoanAccount (
-        accountNumber,
-        dateOfTaken,
-        dueBalance,
-        interestRate
-    ) VALUE ('AC003', '2021-01-31', 10000000, 0.18);
+	(
+		'AC001',
+        'CS003',
+        'Checking',
+		'2016-07-18'
+    ),
+    (
+		'AC002',
+        'CS004',
+        'Savings',
+		'2020-03-02'
+    ),
+    (
+		'AC003',
+        'CS001',
+        'Loan',
+		'2021-01-31'
+    ),
+    (
+		'AC004',
+        'CS005',
+        'Checking',
+		'2022-05-22'
+    ),
+     (
+		'AC005',
+        'CS006',
+        'Checking',
+		'2022-05-22'
+    ),
+     (
+		'AC006',
+        'CS006',
+        'Savings',
+		'2022-05-22'
+    ),
+    (
+		'AC007',
+        'CS003',
+        'Checking',
+		'2016-07-19'
+    ),
+    (
+		'AC008',
+        'CS003',
+        'Loan',
+		'2016-07-19'
+    ),
+    (
+		'AC009',
+        'CS003',
+        'Savings',
+		'2016-07-19'
+    );
+INSERT INTO CheckingAccount
+	(
+    accountNumber,
+    accountBalance
+    )
+VALUE
+	(
+		'AC001',
+        23765000
+    ),
+    (
+		'AC004',
+        10115000
+    ),
+    (
+		'AC005',
+        10153000
+    ),
+    (
+		'AC007',
+        12343000
+    );
+INSERT INTO SavingsAccount
+	(
+    accountNumber,
+    interestRate,
+    accountBalance
+    )
+VALUE
+	(
+		'AC002',
+        0.06,
+        236765000	
+    ),
+    (
+		'AC006',
+        0.07,
+        10115000
+    ),
+    (
+		'AC009',
+        1,
+        9085000
+    );
+    
+INSERT INTO LoanAccount
+	(
+    accountNumber,
+    dateOfTaken,
+    dueBalance,
+    interestRate
+    )
+VALUE
+	(
+		'AC003',
+        '2021-01-31',
+        10000000,
+        0.18
+    ),
+    (
+		'AC008',
+        '2021-01-31',
+        20000000,
+        0.18
+    );
 
 -- Thêm số điện thoại cho khách hàng vào bảng CustomerPhoneNumber
 INSERT INTO
