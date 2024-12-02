@@ -93,12 +93,12 @@ CREATE TRIGGER CHK_dob
 BEFORE INSERT ON Customer
 FOR EACH ROW
 BEGIN
-    IF NEW.dob > CURRENT_DATE() THEN
+    IF NEW.dob > CURDATE() THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Ngày sinh không thể lớn hơn ngày hiện tại.';
     END IF;
 
-    IF YEAR(CURRENT_DATE()) - YEAR(NEW.dob) < 16 THEN
+    IF YEAR(CURDATE()) - YEAR(NEW.dob) < 16 THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Khách hàng phải từ đủ 16 tuổi trở lên.';
     END IF;
@@ -128,10 +128,10 @@ BEFORE INSERT ON ServedDate
 FOR EACH ROW
 BEGIN
     IF NEW.dateOfServing IS NULL THEN
-        SET NEW.dateOfServing = CURRENT_DATE;
+        SET NEW.dateOfServing = CURDATE();
     END IF;
 
-    IF NEW.dateOfServing > CURRENT_DATE() THEN
+    IF NEW.dateOfServing > CURDATE() THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Ngày phục vụ không thể lớn hơn ngày hiện tại.';
     END IF;
@@ -144,7 +144,7 @@ CREATE TABLE Account (
     accountNumber CHAR(36) PRIMARY KEY DEFAULT (UUID()),  
     customerCode CHAR(36), 
     accountType ENUM('Savings', 'Checking', 'Loan') NOT NULL, 
-    openDate DATE NOT NULL,
+    openDate DATE,
     FOREIGN KEY (customerCode) REFERENCES Customer(customerCode),
     CONSTRAINT check_type CHECK (accountType IN ('Savings', 'Checking', 'Loan'))
 );
@@ -155,10 +155,10 @@ BEFORE INSERT ON Account
 FOR EACH ROW
 BEGIN
     IF NEW.openDate IS NULL THEN
-        SET NEW.openDate = CURRENT_DATE;
+        SET NEW.openDate = CURDATE();
     END IF;
 
-    IF NEW.openDate > CURRENT_DATE() THEN
+    IF NEW.openDate > CURDATE() THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Ngày tạo tài khoản không thể lớn hơn ngày hiện tại.';
     END IF;
@@ -185,7 +185,7 @@ CREATE TABLE CheckingAccount (
 -- LOAN ACCOUNT
 CREATE TABLE LoanAccount (
     accountNumber CHAR(36) PRIMARY KEY,
-    dateOfTaken DATE NOT NULL,
+    dateOfTaken DATE,
     dueBalance DECIMAL(15, 2) NOT NULL, 
     interestRate DECIMAL(5, 2) NOT NULL,
     FOREIGN KEY (accountNumber) REFERENCES Account(accountNumber)
@@ -197,10 +197,10 @@ BEFORE INSERT ON LoanAccount
 FOR EACH ROW
 BEGIN
 	IF NEW.dateOfTaken IS NULL THEN
-        SET NEW.dateOfTaken = CURRENT_DATE();
+        SET NEW.dateOfTaken = CURDATE();
     END IF;
 
-    IF NEW.dateOfTaken > CURRENT_DATE() THEN
+    IF NEW.dateOfTaken > CURDATE() THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Ngày nhận khoản vay không thể lớn hơn ngày hiện tại.';
     END IF;

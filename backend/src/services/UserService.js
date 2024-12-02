@@ -58,16 +58,16 @@ class UserService {
           openDate: curr.openDate,
           loanDetails: curr.loanDateOfTaken
             ? {
-                dateOfTaken: curr.loanDateOfTaken,
-                dueBalance: curr.loanDueBalance,
-                interestRate: curr.loanInterestRate,
-              }
+              dateOfTaken: curr.loanDateOfTaken,
+              dueBalance: curr.loanDueBalance,
+              interestRate: curr.loanInterestRate,
+            }
             : null,
           savingDetails: curr.savingInterestRate
             ? {
-                interestRate: curr.savingInterestRate,
-                accountBalance: curr.savingAccountBalance,
-              }
+              interestRate: curr.savingInterestRate,
+              accountBalance: curr.savingAccountBalance,
+            }
             : null,
           checkingDetails: curr.checkingAccountBalance
             ? { accountBalance: curr.checkingAccountBalance }
@@ -84,23 +84,13 @@ class UserService {
 
   addAccount = async (customerCode, accountType, additionalData) => {
     try {
-      let accountNumber = "";
-      const queryGetAccountNumber = `SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`;
-      const [rows] = await db.query(queryGetAccountNumber, [
-        customerCode,
-        accountType,
-      ]);
-      if (rows.length === 0) {
-        const queryAddAccount = `INSERT INTO Account (customerCode, accountType) VALUES (?, ?)`;
-        await db.query(queryAddAccount, [customerCode, accountType]);
-        const [newAccountNumberRow] = await db.query(
-          `SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`,
-          [customerCode, accountType]
-        );
-        accountNumber = newAccountNumberRow[0].accountNumber;
-      } else {
-        accountNumber = rows[0].accountNumber;
-      }
+      const queryAddAccount = `INSERT INTO Account (customerCode, accountType) VALUES (?, ?)`;
+      await db.query(queryAddAccount, [customerCode, accountType]);
+      const [newAccountNumberRow] = await db.query(
+        `SELECT accountNumber FROM Account WHERE customerCode = ? AND accountType = ? ORDER BY openDate DESC LIMIT 1`,
+        [customerCode, accountType]
+      );
+      const accountNumber = newAccountNumberRow[0].accountNumber;
 
       if (accountType === "Savings") {
         const querySavings = `INSERT INTO SavingsAccount (accountNumber, interestRate, accountBalance) VALUES (?, ?, ?)`;
