@@ -11,7 +11,7 @@ const port = process.env.BE_PORT;
 
 app.use(
     cors({
-        origin: 'https://bank-database-production.up.railway.app:3000/',
+        origin: process.env.FE_URL,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
