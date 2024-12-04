@@ -2,7 +2,7 @@
     "scripts": {
         "start": "concurrently \"npm run server\" \"npm run client\"",
         "server": "npm --prefix backend start",
-        "build": "npm --prefix frontend start"
+        "client": "npm --prefix frontend start"
     },
     "devDependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
