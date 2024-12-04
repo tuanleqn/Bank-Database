@@ -1,3 +1,17 @@
+-- Branch fax
+INSERT INTO Branchfax (branchName, faxNumber) VALUES
+('Branch A', '5551234567'),
+('Branch B', '5557654321'),
+('Branch C', '5552345678'),
+('Branch D', '5558765432');
+
+-- Branch phone
+INSERT INTO BranchPhone (branchName, phoneNumber) VALUES
+('Branch A', '5551234567'),
+('Branch B', '5557654321'),
+('Branch C', '5552345678'),
+('Branch D', '5558765432');
+
 -- Employee
 INSERT INTO Employee (
         employeeID,
@@ -37,8 +51,8 @@ VALUES
         'Branch A'
     );
     
-INSERT INTO EmployeePhone (employeeID, phoneNumber)
-VALUES ('E003', '5557889147'),
+INSERT INTO EmployeePhone (employeeID, phoneNumber) VALUES 
+    ('E003', '5557889147'),
     ('E004', '5553336442'),
     ('E005', '5559230417'),
     ('E006', '5555776107');
@@ -59,8 +73,8 @@ INSERT INTO Customer
 VALUES
     ('CS001', 'Alice', 'Nguyen', '123 Nguyen Trai', '456 Le Loi', 'admin1@hcmut.edu.vn', '1990-01-15', FALSE, 'E001'),
     ('CS002', 'Bob', 'Pham', '789 Tran Hung Dao', NULL, 'user1@hcmut.edu.vn', '1985-05-22', FALSE, 'E001'),
-    ('CS003', 'Charlie', 'Tran', '321 Binh Tan', '654 Pham Van Dong', 'charlie.tran@example.com', '1995-07-10', FALSE, 'E002'),
-    ('CS004', 'David', 'Le', '102 Hoang Hoa Tham', NULL, 'david.le@example.com', '2007-03-14', TRUE, 'E003'),
+    ('CS003', 'Charlie', 'Tran', '321 Binh Tan', '654 Pham Van Dong', 'user2@hcmut.edu.vn', '1995-07-10', FALSE, 'E002'),
+    ('CS004', 'David', 'Le', '102 Hoang Hoa Tham', NULL, 'user3@hcmut.edu.vn', '1995-07-10', TRUE, 'E003'),
     ('CS005', 'Eve', 'Hoang', '456 Hai Ba Trung', '789 Tan Binh', 'eve.hoang@example.com', '1998-08-21', FALSE, 'E001'),
     ('CS006', 'Sophia', 'Tran', '15 Nguyen Van Linh', '88 Nguyen Hue', 'sophia.tran@example.com', '1980-12-01', FALSE, 'E001'),
     ('CS007', 'Michael', 'Nguyen', '90 Tran Nao', NULL, 'michael.nguyen@example.com', '1983-04-22', FALSE, 'E002'),
@@ -152,99 +166,37 @@ VALUES
 
 
 -- Account
-INSERT INTO Account (
-	accountNumber,  
-    customerCode, 
-    accountType, 
-    openDate
-    )
-VALUES
-	(
-		'AC001',
-        'CS003',
-        'Checking',
-		'2016-07-18'
-    ),
-    (
-		'AC002',
-        'CS004',
-        'Savings',
-		'2020-03-02'
-    ),
-    (
-		'AC003',
-        'CS001',
-        'Loan',
-		'2021-01-31'
-    ),
-    (
-		'AC004',
-        'CS005',
-        'Checking',
-		'2022-05-22'
-    ),
-     (
-		'AC005',
-        'CS006',
-        'Checking',
-		'2022-05-22'
-    ),
-     (
-		'AC006',
-        'CS006',
-        'Savings',
-		'2022-05-22'
-    );
-INSERT INTO CheckingAccount
-	(
-    accountNumber,
-    accountBalance
-    )
-VALUE
-	(
-		'AC001',
-        23765000
-    ),
-    (
-		'AC004',
-        10115000
-    ),
-    (
-		'AC005',
-        10153000
-    );
-INSERT INTO SavingsAccount
-	(
-    accountNumber,
-    interestRate,
-    accountBalance
-    )
-VALUE
-	(
-		'AC002',
-        0.06,
-        236765000	
-    ),
-    (
-		'AC006',
-        0.07,
-        10115000
-    );
+INSERT INTO Account (accountNumber, customerCode, accountType, openDate) VALUES
+    ('AC001', 'CS003', 'Checking', '2016-07-18'),
+    ('AC002', 'CS004', 'Savings', '2020-03-02'),
+    ('AC003', 'CS001', 'Loan', '2021-01-31'),
+    ('AC004', 'CS005', 'Checking', '2022-05-22'),
+    ('AC005', 'CS006', 'Checking', '2022-05-22'),
+    ('AC006', 'CS006', 'Savings', '2022-05-22'),
+    ('AC007', 'CS003', 'Checking', '2016-07-19'),
+    ('AC008', 'CS003', 'Loan', '2016-07-19'),
+    ('AC009', 'CS003', 'Savings', '2016-07-19'),
+    ('AC010', 'CS001', 'Savings', '2022-03-02'),
+    ('AC011', 'CS004', 'Loan', '2016-07-19'),
+    ('AC012', 'CS005', 'Loan', '2016-07-19');
+
+INSERT INTO CheckingAccount (accountNumber, accountBalance) VALUE
+    ('AC001', 23765000),
+    ('AC004', 10115000),
+    ('AC005', 10153000),
+    ('AC007', 12343000);
+
+INSERT INTO SavingsAccount (accountNumber, interestRate, accountBalance) VALUE
+    ('AC002', 6, 236765000),
+    ('AC006', 7, 10115000),
+    ('AC009', 1, 9085000),
+    ('AC010', 4, 2300000);
     
-INSERT INTO LoanAccount
-	(
-    accountNumber,
-    dateOfTaken,
-    dueBalance,
-    interestRate
-    )
-VALUE
-	(
-		'AC003',
-        '2021-01-31',
-        10000000,
-        0.18
-    );
+INSERT INTO LoanAccount (accountNumber, dateOfTaken, dueBalance, interestRate) VALUE
+	('AC003', '2021-01-31', 10000000, 0.18),
+    ('AC008', '2021-01-31', 20000000, 0.18),
+    ('AC011', '2021-01-31', 30000000, 0.18),
+    ('AC012', '2021-01-31', 40000000, 0.18);
 
 -- Thêm số điện thoại cho khách hàng vào bảng CustomerPhoneNumber
 INSERT INTO CustomerPhoneNumber (phoneNumber, customerCode)
@@ -256,11 +208,9 @@ VALUES
     ('0905123456', (SELECT customerCode FROM Customer WHERE customerCode = 'CS005')),
 	('0905123123', (SELECT customerCode FROM Customer WHERE customerCode = 'CS006'));
 
-
-
-
 -- TK: là email, MK: 123456
 INSERT INTO user (email, password, role) VALUES
 ('admin1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'admin'), 
-('user1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'user');
-
+('user1@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'user'),
+('user2@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'user'),
+('user3@hcmut.edu.vn', '$2a$10$MVH7lqOh6kCkHimpuIEyg.0ABo/QcHWO0eNQcVtamRNk7OpWcC22y', 'user');
