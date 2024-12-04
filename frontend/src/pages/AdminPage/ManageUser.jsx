@@ -163,7 +163,7 @@ function ManageUsers() {
             })
             .catch((error) => {
                 if (error.response.status === 401) {
-                    window.location.href = 'http://localhost:3000/auth/login';
+                    window.location.href = 'https://co2013-assignment2-bank-database-l09-g03.vercel.app/auth/login';
                 }
                 console.log(error.response.data.message);
             });
