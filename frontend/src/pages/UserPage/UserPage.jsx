@@ -32,7 +32,7 @@ function UserPage() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:3001/user/profile', {
+            .get('https://bank-database-production.up.railway.app/user/profile', {
                 withCredentials: true,
             })
             .then((res) => {

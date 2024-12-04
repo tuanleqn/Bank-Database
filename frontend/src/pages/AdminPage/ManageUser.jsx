@@ -63,7 +63,7 @@ function ManageUsers() {
     };
 
     const handleAddAccount = () => {
-        let apiAddAccount = 'http://localhost:3001/user/account';
+        let apiAddAccount = 'https://bank-database-production.up.railway.app/user/account';
         let accountBalance = '';
         let interestRate = '';
         let dueBalance = '';
@@ -124,7 +124,7 @@ function ManageUsers() {
         }
 
         const search = document.querySelector('#search').value;
-        const apiSearch = `http://localhost:3001/admin/customer_by_name?name=${search}`;
+        const apiSearch = `https://bank-database-production.up.railway.app/admin/customer_by_name?name=${search}`;
         axios
             .get(`${apiSearch}`, {
                 withCredentials: true,
@@ -138,8 +138,7 @@ function ManageUsers() {
     };
 
     const fetchAccounts = (customerCode) => {
-        
-        const apiCustomerAccounts = `http://localhost:3001/admin/customer_accounts?customerCode=${customerCode}`;
+        const apiCustomerAccounts = `https://bank-database-production.up.railway.app/admin/customer_accounts?customerCode=${customerCode}`;
         axios
             .get(`${apiCustomerAccounts}`, {
                 withCredentials: true,
@@ -147,15 +146,14 @@ function ManageUsers() {
             .then((response) => {
                 setDataAccouts(response.data.accounts);
                 console.log(response.data.accounts);
-                
             })
             .catch((error) => {
                 console.log(error.response.data.message);
-            });            
+            });
     };
 
     const fetchAllUser = () => {
-        const apiCustomer = 'http://localhost:3001/admin/all_customers';
+        const apiCustomer = 'https://bank-database-production.up.railway.app/admin/all_customers';
         axios
             .get(`${apiCustomer}`, {
                 withCredentials: true,
@@ -182,9 +180,9 @@ function ManageUsers() {
         listCus.forEach((item) => {
             item.addEventListener('click', () => {
                 customerCode = item.children[0].innerText;
-                setDataAccouts([])
-                
-                const apiCustomerInfo = `http://localhost:3001/admin/basic_customer_info?customerCode=${customerCode}`;
+                setDataAccouts([]);
+
+                const apiCustomerInfo = `https://bank-database-production.up.railway.app/admin/basic_customer_info?customerCode=${customerCode}`;
                 axios
                     .get(`${apiCustomerInfo}`, {
                         withCredentials: true,

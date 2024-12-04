@@ -20,10 +20,11 @@ function ServiceReport() {
     const [searchedColumn, setSearchedColumn] = useState('')
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const disabledDate = (current) => {
-        return current && current > dayjs().endOf('day')
-    }
+        return current && current > dayjs().endOf('day');
+    };
 
     const formatDate = (isoDate, type) => {
         const date = new Date(isoDate);
@@ -36,7 +37,7 @@ function ServiceReport() {
         } else if (type === 'ymd') {
             return `${year}-${month}-${day}`;
         }
-    }
+    };
 
     const handleDateChange = (values) => {
         if (values && values.length === 2) {
@@ -44,15 +45,15 @@ function ServiceReport() {
             const sDate = new Date(formatDate(start, 'ymd'));
             const eDate = new Date(formatDate(end, 'ymd'));
             setStartDate(sDate);
-            setEndDate(eDate)
+            setEndDate(eDate);
             setFilteredData(
-                data.filter(item => {
+                data.filter((item) => {
                     const dateOfServing = new Date(formatDate(item.dateOfServing, 'ymd'));
                     return dateOfServing >= sDate && dateOfServing <= eDate;
-                })
-            )
+                }),
+            );
         }
-    }
+    };
 
     const openNotification = () => {
         notification.error({
@@ -65,7 +66,7 @@ function ServiceReport() {
     const showModal = async () => {
         if (startDate !== '' && endDate !== '') {
             try {
-                const response = await axios.post('http://localhost:3001/admin/total-serve', {
+                const response = await axios.post('${apiUrl}admin/total-serve', {
                     startDate: formatDate(startDate, 'ymd'),
                     endDate: formatDate(endDate, 'ymd'),
                 });
@@ -74,22 +75,21 @@ function ServiceReport() {
                         ...item,
                         stt: index + 1,
                         key: index,
-                    }))
+                    })),
                 );
                 setLoadingP(false);
-                setOpen(true)
+                setOpen(true);
             } catch (error) {
                 console.error('Error:', error.message);
             }
         } else {
-            openNotification()
+            openNotification();
         }
-    }
+    };
 
     const hideModal = () => {
-        setOpen(false)
-    }
-
+        setOpen(false);
+    };
 
     const columns = [
         {
@@ -136,7 +136,7 @@ function ServiceReport() {
                 {
                     text: 'Staff',
                     value: 'Staff',
-                }
+                },
             ],
             onFilter: (value, record) => record.position === value,
         },
@@ -162,10 +162,11 @@ function ServiceReport() {
             width: 150,
             isSearched: false,
             render: (e) => <p>{formatDate(e, 'dmy')}</p>,
-            sorter: (a, b) => new Date(formatDate(a.dateOfServing, 'ymd')) - new Date(formatDate(b.dateOfServing, 'ymd')),
+            sorter: (a, b) =>
+                new Date(formatDate(a.dateOfServing, 'ymd')) - new Date(formatDate(b.dateOfServing, 'ymd')),
             fixed: 'right',
-        }
-    ]
+        },
+    ];
 
     const columnsP = [
         {
@@ -197,33 +198,33 @@ function ServiceReport() {
             key: 'totalServe',
             width: 100,
             sorter: (a, b) => a.totalServe - b.totalServe,
-        }
-    ]
+        },
+    ];
 
     useEffect(() => {
         axios
-            .get(`http://localhost:3001/admin/service-report`)
+            .get(`${apiUrl}admin/service-report`)
             .then((response) => {
                 setData(
                     response.data.data.map((item, index) => ({
                         ...item,
                         stt: index + 1,
                         key: index,
-                    }))
-                )
+                    })),
+                );
                 setFilteredData(
                     response.data.data.map((item, index) => ({
                         ...item,
                         stt: index + 1,
                         key: index,
-                    }))
-                )
+                    })),
+                );
                 setLoading(false);
             })
             .catch((error) => {
-                console.error(error.message)
-            })
-    }, [])
+                console.error(error.message);
+            });
+    }, []);
 
     return (
         <div className="ServiceReport mt-6 h-[490px]">
