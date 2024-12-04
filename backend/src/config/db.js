@@ -1,11 +1,20 @@
 const mysql = require("mysql2");
+require('dotenv').config();
 
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "123456",
-  database: "bank_db",
-}).promise();
+const connection = mysql
+    .createConnection({
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        database: process.env.DB_DATABASE,
+        ssl: {
+            rejectUnauthorized: true,
+            // ca: fs.readFileSync('./ca.pem').toString(), // Đường dẫn đến chứng chỉ ca.pem
+            ca: process.env.DB_CA,
+        },
+    })
+    .promise();
 
 connection.connect((err) => {
   if (err) {
