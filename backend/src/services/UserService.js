@@ -58,16 +58,16 @@ class UserService {
           openDate: curr.openDate,
           loanDetails: curr.loanDateOfTaken
             ? {
-              dateOfTaken: curr.loanDateOfTaken,
-              dueBalance: curr.loanDueBalance,
-              interestRate: curr.loanInterestRate,
-            }
+                dateOfTaken: curr.loanDateOfTaken,
+                dueBalance: curr.loanDueBalance,
+                interestRate: curr.loanInterestRate,
+              }
             : null,
           savingDetails: curr.savingInterestRate
             ? {
-              interestRate: curr.savingInterestRate,
-              accountBalance: curr.savingAccountBalance,
-            }
+                interestRate: curr.savingInterestRate,
+                accountBalance: curr.savingAccountBalance,
+              }
             : null,
           checkingDetails: curr.checkingAccountBalance
             ? { accountBalance: curr.checkingAccountBalance }
@@ -84,6 +84,8 @@ class UserService {
 
   addAccount = async (customerCode, accountType, additionalData) => {
     try {
+      await db.beginTransaction();
+
       const queryAddAccount = `INSERT INTO Account (customerCode, accountType) VALUES (?, ?)`;
       await db.query(queryAddAccount, [customerCode, accountType]);
       const [newAccountNumberRow] = await db.query(
@@ -113,8 +115,12 @@ class UserService {
           additionalData.interestRate,
         ]);
       }
+
+      await db.commit();
+
       return "Account added successfully";
     } catch (error) {
+      await db.rollback(); // Rollback nếu có lỗi
       throw new Error(error.message);
     }
   };
