@@ -66,7 +66,7 @@ function ServiceReport() {
     const showModal = async () => {
         if (startDate !== '' && endDate !== '') {
             try {
-                const response = await axios.post('${apiUrl}admin/total-serve', {
+                const response = await axios.post(`${apiUrl}admin/total-serve`, {
                     startDate: formatDate(startDate, 'ymd'),
                     endDate: formatDate(endDate, 'ymd'),
                 });
