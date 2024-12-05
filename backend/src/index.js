@@ -11,7 +11,7 @@ const port = process.env.BE_PORT;
 
 app.use(
     cors({
-        origin: 'https://co2013-assignment2-bank-database-l09-g03.vercel.app',
+        origin: process.env.FE_URL,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
