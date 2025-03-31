@@ -30,7 +30,7 @@ app.use(
         cookie: {
             secure: true,
             sameSite: 'none',
-            domain: '.bank-database-production.up.railway.app',
+            domain: '.bank-database-db.onrender.com',
             maxAge: 30 * 24 * 60 * 60 * 1000,
         },
     })
