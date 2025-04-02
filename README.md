@@ -31,7 +31,3 @@ Bank Database is a web-based platform for managing customer and employee data ef
 - **Back-end Developer**: Implemented **server-side logic**, **database management**, and **API development**.  
 
 Feel free to contribute and explore! 🚀  
-
----
-
-Cách viết này giúp README rõ ràng, chuyên nghiệp hơn và dễ đọc hơn. Bạn có muốn bổ sung thêm phần hướng dẫn cài đặt không? 😊
